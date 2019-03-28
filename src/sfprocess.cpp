@@ -49,7 +49,7 @@ static void process_data (double *data, int count, int channels) ;
 
 
 int
-main (void)
+old_main (void)
 {	/* This is a buffer of double precision floating point values
 	** which will hold our data while we process it.
 	*/
