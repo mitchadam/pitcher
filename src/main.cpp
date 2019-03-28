@@ -11,30 +11,35 @@
 #include "reader.h"
 #include "writer.h"
 #include "fft.h"
+#include "fundamental.h"
 #include <valarray>
 #include <complex>
 #include <iostream>
 
+constexpr std::size_t bufferLen = 32768;
+
 static void process_data (double *data, int count, int channels) ;
 
 int main() {
-// std::size_t bufferLen = 1024;
-// double *buffer = new double[bufferLen];
-// Reader reader("violin.wav", buffer, bufferLen);
-// reader.open();
-// // Need to pass the SF_INFO struct from the reader to the writer
-// Writer writer("output.wav", buffer, bufferLen, reader.getsfinfo());
-// writer.open();
-//
-// int readCount;
-// // Continue to read while we have not reached the end of the input file
-// while ((readCount = reader.read())) {
-//   process_data(buffer, readCount, reader.getsfinfo().channels);
-//   writer.write();
-// };
-//
-// reader.close();
-// writer.close();
+  double *buffer = new double[bufferLen];
+  Reader reader("piano-c4.wav", buffer, bufferLen);
+  if (!reader.open()) {
+    std::cout << "Failed to open file." << std::endl;
+    return 1;
+  }
+  // Need to pass the SF_INFO struct from the reader to the writer
+  Writer writer("output.wav", buffer, bufferLen, reader.getsfinfo());
+  writer.open();
+
+  int readCount;
+  // Continue to read while we have not reached the end of the input file
+  while ((readCount = reader.read())) {
+    process_data(buffer, readCount, reader.getsfinfo().channels);
+    writer.write();
+  };
+
+  reader.close();
+  writer.close();
   CVector varr = {{10,0}, {2,0}, {20,0}, {1,0} };
   std::cout <<"Inital: "<< std::endl;
 
@@ -60,7 +65,7 @@ int main() {
 
 // Copied from example on libsndfile github
 static void process_data(double *data, int count, int channels) {
-  double channel_gain[] = {0.5, 0.8, 0.1, 0.4, 0.4, 0.9};
+  //double channel_gain[] = {0.5, 0.8, 0.1, 0.4, 0.4, 0.9};
   int k, chan;
 
   /* Process the data here.
@@ -69,9 +74,22 @@ static void process_data(double *data, int count, int channels) {
   ** Current we just apply a channel dependant gain.
   */
 
-  for (chan = 0; chan < channels; chan++)
-    for (k = chan; k < count; k += channels)
-      data[k] *= channel_gain[chan];
+  // Construct a valarray of complex numbers from the input buffer
+  CVector bufferVector;
+  bufferVector.resize(bufferLen);
+
+  for (chan = 0; chan < channels; chan++) {
+    for (k = chan; k < count; k += channels) {
+      //data[k] *= channel_gain[chan];
+
+      // Convert each value in the buffer into a complex number
+      bufferVector[k] = CNum(data[k], 0);
+    }
+  }
+
+  // Calculate the fundamental frequency
+  double fund = fundamental(bufferVector, 44100);
+  std::cout << fund << std::endl;
 
   return;
 } /* process_data */
