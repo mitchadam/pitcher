@@ -15,6 +15,9 @@
 typedef std::complex<double> CNum;
 typedef std::valarray<CNum> CVector;
 
+typedef std::complex<double> Complex;
+typedef std::valarray<Complex> CArray;
+
 const double PI = 3.141592653589793238460;
 
 /*
@@ -28,4 +31,7 @@ const double PI = 3.141592653589793238460;
     library
 */
 void FFT(CVector& z);
+
+void IFFT(CVector& z);
+
 #endif

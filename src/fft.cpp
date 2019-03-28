@@ -6,32 +6,30 @@
 // Final Project
 // -------------------------------------------------
 #include "fft.h"
+#include <iostream>
 
 void FFT(CVector& z){
     const size_t n = z.size();
-
     // Base Case, ends recursion
-    if (n == 1) return;
+    if (n <= 1) return;
 
     // Split up signal into even and odd components
-    CVector zodd =  z[std::slice(0, n/2, 2)];
-    CVector zeven = z[std::slice(1, n/2, 2)];
+    CVector zeven =  z[std::slice(0, n/2, 2)];
+    CVector zodd = z[std::slice(1, n/2, 2)];
 
     // Recursivley call FFT on each component
-    FFT(zodd);
     FFT(zeven);
+    FFT(zodd);
 
     // Recombine the FFT of the even and odd components
-    for (size_t i = 0; i < n/2; i++) {
+    for (size_t i = 0; i < n/2; ++i) {
         // Mutiple odd components by common mutlipler
-        // SWITCH sign of exponent for IFFT
-        CNum g =  std::polar(1.0, 2 * PI * i/n) * zodd[i];
+        CNum g =  std::polar(1.0, -2 * PI * i/n) * zodd[i];
 
         //From periodicity of complex ecponential
         //We can more efficiently combine the even and off components as
         //follows
-        // need 1/n factor for ifft
-        z[i] = (zeven[i] + g)/n;
-        z[i+n/2]= (zeven[i] - g)n;
+        z[i] = zeven[i] + g;
+        z[i+n/2]= zeven[i] - g;
     }
 }
