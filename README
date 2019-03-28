@@ -20,7 +20,9 @@ Running instructions:
     0.
 
 Usage instructions:
-    *
+    * Install libsndfile if it isn't installed already by running:
+      sudo apt-get install libsndfile1
+      sudo apt-get install libsndfile1-dev
 
 Assumptions:
     *
