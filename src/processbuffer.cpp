@@ -25,5 +25,22 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   // Calculate the fundamental frequency
   double fund = fundamental(bufferVector, 44100);
 
+  // Construct array of actual frequencies of each bin
+  // based on how the phase changes in the same bin between windows
+
+  // Construct array of magnitudes
+
+  // Do resampling to shift pitch
+  // Simply move magnitudes to new indeces
+  // Move AND scale actual frequencies
+
+  // Convert actual frequencies back to array of phases
+
+  // Use phase and magnitudes to calculate re and im parts
+
+  // Inverse FFT each window
+
+  // Add windows back together
+
   return;
 }
