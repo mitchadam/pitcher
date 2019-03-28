@@ -14,14 +14,12 @@ int main() {
   Writer writer("output.wav", buffer, bufferLen, reader.getsfinfo());
   writer.open();
 
-  /* While there are.frames in the input file, read them, process
-  ** them and write them to the output file.
-  */
   int readCount;
+  // Continue to read while we have not reached the end of the input file
   while ((readCount = reader.read())) {
     process_data(buffer, readCount, reader.getsfinfo().channels);
     writer.write();
-  } while (readCount > 0);
+  };
 
   reader.close();
   writer.close();
