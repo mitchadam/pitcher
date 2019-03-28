@@ -4,7 +4,7 @@
 #include <complex>
 #include <valarray>
 
-#include "fft.h"
+#include "fourier.h"
 
 // Used to represent the complex numbers in arary
 typedef std::complex<double> CNum;

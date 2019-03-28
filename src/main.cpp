@@ -32,16 +32,9 @@ int main() {
   writer.open();
 
   int readCount;
-  // Continue to read while we have not reached the end of the input file
-  while ((readCount = reader.read())) {
-    process_data(buffer, readCount, reader.getsfinfo().channels);
-    writer.write();
-  };
 
   reader.close();
   writer.close();
-  CVector varr = {{10,0}, {2,0}, {20,0}, {1,0} };
-  std::cout <<"Inital: "<< std::endl;
   CVector varr = {{10,0}, {2,0}, {20,0}, {1,0} };
   std::cout <<"Inital: "<< std::endl;
 
@@ -63,9 +56,8 @@ int main() {
   }
   std::cout << std::endl;
   CVector tester;
-  tester.resize(128,100);
+  tester.resize(4096,100);
   std::vector<CVector> test = SFTF(tester);
-
 }
 
 
