@@ -7,7 +7,7 @@
 // -------------------------------------------------
 #include "fft.h"
 
-void FFT(CVector& z){
+void IFFT(CVector& z){
     const size_t n = z.size();
 
     // Base Case, ends recursion
@@ -32,4 +32,5 @@ void FFT(CVector& z){
         z[i] = zeven[i] + g;
         z[i+n/2]= zeven[i] - g;
     }
+
 }
