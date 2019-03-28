@@ -5,8 +5,7 @@
 //
 // Final Project
 // -------------------------------------------------
-#include "fft.h"
-#include <iostream>
+#include "fourier.h"
 
 void FFT(CVector& z){
     const size_t n = z.size();

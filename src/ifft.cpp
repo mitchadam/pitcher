@@ -5,7 +5,7 @@
 //
 // Final Project
 // -------------------------------------------------
-#include "fft.h"
+#include "fourier.h"
 
 void applyIFFT(CVector& z){
     IFFT(z);
