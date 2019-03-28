@@ -1,3 +1,11 @@
+// -------------------------------------------------
+// Name: Mitchell Adam, Ryan Shukla
+// ID: 1528592, 1537980
+// CMPUT 275, Winter 2018
+//
+// Final Project
+// -------------------------------------------------
+
 #include <cstring> // std::memset()
 
 #include "writer.h"
@@ -10,9 +18,6 @@ Writer::Writer(std::string filename, double *buffer, std::size_t bufferLen,
   this->filename = filename;
   this->buffer = buffer;
   this->bufferLen = bufferLen;
-
-  // Initialize sfinfo struct
-  std::memset(&sfinfo, 0, sizeof(sfinfo)) ;
 }
 
 bool Writer::open() {
