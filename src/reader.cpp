@@ -40,7 +40,7 @@ SF_INFO &Reader::getsfinfo() {
  * the end of the file.
  */
 int Reader::read() {
-  return sf_readf_double(file, buffer, bufferLen);
+  return sf_read_double(file, buffer, bufferLen);
 }
 
 void Reader::close() {

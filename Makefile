@@ -9,7 +9,7 @@
 TARGET := ./pitcher
 
 CC := g++
-CFLAGS := -std=c++11
+CFLAGS := -std=c++11 -g
 # linker flags
 LDFLAGS := -lsndfile
 
