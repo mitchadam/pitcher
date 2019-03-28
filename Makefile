@@ -10,6 +10,8 @@ TARGET := ./pitcher
 
 CC := g++
 CFLAGS := -std=c++11
+# linker flags
+LDFLAGS := -lsndfile
 
 # Directory of cpp source code
 SRCDIR := src
@@ -21,7 +23,7 @@ SOURCES := $(shell find $(SRCDIR) -name *.cpp)
 OBJECTS := $(patsubst $(SRCDIR)/%, $(OBJDIR)/%, $(SOURCES:.cpp=.o))
 
 $(TARGET): $(OBJECTS)
-	$(CC) -o $(TARGET) $^
+	$(CC) -o $(TARGET) $^ $(LDFLAGS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	mkdir -p $(OBJDIR)
