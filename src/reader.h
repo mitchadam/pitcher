@@ -14,6 +14,7 @@ public:
   bool open();
   int read();
   void close();
+  SF_INFO& getsfinfo(); 
 
 private:
   double *buffer;
