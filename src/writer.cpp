@@ -10,9 +10,6 @@ Writer::Writer(std::string filename, double *buffer, std::size_t bufferLen,
   this->filename = filename;
   this->buffer = buffer;
   this->bufferLen = bufferLen;
-
-  // Initialize sfinfo struct
-  std::memset(&sfinfo, 0, sizeof(sfinfo)) ;
 }
 
 bool Writer::open() {

@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "reader.h"
 #include "writer.h"
 
@@ -16,11 +18,10 @@ int main() {
   ** them and write them to the output file.
   */
   int readCount;
-  readCount = reader.read();
-  while (readCount) {
+  while ((readCount = reader.read())) {
     process_data(buffer, readCount, reader.getsfinfo().channels);
     writer.write();
-  };
+  } while (readCount > 0);
 
   reader.close();
   writer.close();
