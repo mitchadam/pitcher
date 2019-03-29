@@ -12,6 +12,7 @@
 #include <complex>
 #include <valarray>
 
+
 // Used to represent the complex numbers in arary
 typedef std::complex<double> CNum;
 typedef std::valarray<CNum> CVector;
@@ -42,7 +43,7 @@ void IFFT(CVector& z);
     Implemntation of the short time fourier transform
     Breaks up signal into windows to get more accurate ffts
 */
-std::vector<CVector> SFTF(CVector& z);
+std::vector<CVector> SFTF(CVector& z, int sampleSize, int overlap);
 /*
     Used by STFT to create the windows of a signal
 */

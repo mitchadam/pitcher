@@ -35,4 +35,4 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   // Add windows back together
 
   return;
-
+}
