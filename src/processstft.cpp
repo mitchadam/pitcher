@@ -6,7 +6,7 @@
 // Final Project
 // -------------------------------------------------
 
-#include <cmath> // M_2_PI, fmod()
+#include <cmath> // M_PI, fmod()
 
 #include "processstft.h"
 
@@ -71,7 +71,7 @@ void processSTFT(std::vector<CVector> &stft,
 
       // Calculate the expected phase difference based on the overlap between
       // windows
-      expectedDiff = ((double)freqIndex) * M_2_PI * ((double)windowStride) /
+      expectedDiff = ((double)freqIndex) * 2 * M_PI * ((double)windowStride) /
                      ((double)bufferLen);
 
       // Correct phaseDiff by accounting for expectedDiff
@@ -82,7 +82,7 @@ void processSTFT(std::vector<CVector> &stft,
 
       // Calculate actual frequency based on phaseDiff
       actualFreqs[windowIndex][freqIndex] =
-          freqIndex * freqPerBin +
+          ((double)freqIndex) * freqPerBin +
           phaseDiff * ((double)overlapFactor) * freqPerBin / (2 * M_PI);
     }
   }
@@ -92,10 +92,45 @@ void processSTFT(std::vector<CVector> &stft,
   // Simply move magnitudes to new indeces
   // Move AND scale actual frequencies
 
-  // Convert actual frequencies back to array of phases
+  // Update the stft representation based on the new magnitudes and frequencies
+  // - Convert actual frequencies back to array of phases
+  // - Use phase and magnitudes to calculate re and im parts
 
-  // Use phase and magnitudes to calculate re and im parts
+  // Since we calculate a change in phase between windows, we need to keep track
+  // of the phase at the previous window
+  std::vector<double> phaseAccum;
+  // TODO what to initialize this to?
+  phaseAccum.resize(bufferLen, 0);
 
+  // Loop across frequency bins
+  for (std::size_t freqIndex = 0; freqIndex < bufferLen; freqIndex++) {
+    // Loop across stft windows
+    for (std::size_t windowIndex = 0; windowIndex < stft.size();
+         windowIndex++) {
+      // Subtract ideal bin frequency to get change in frequency
+      double deltaFreq = actualFreqs[windowIndex][freqIndex] -
+                         ((double)freqIndex) * freqPerBin;
+
+      // Convert change in frequency to actual change in phase
+      double deltaPhase = deltaFreq * 2 * M_PI;
+      deltaPhase /= overlapFactor;
+      deltaPhase /= freqPerBin;
+
+      // Convert actual change in phase back to measured change in phase
+      // by adding the expected change in phase
+      deltaPhase += ((double)freqIndex) * 2 * M_PI * ((double)windowStride) /
+                    ((double)bufferLen);
+
+      // Add the change in phase to the accumulator
+      phaseAccum[freqIndex] += deltaPhase;
+      double phase = phaseAccum[freqIndex];
+
+      // Calculate real and imaginary parts of stft bin
+      double mag = magnitudes[windowIndex][freqIndex];
+      stft[windowIndex][freqIndex].real(mag * std::cos(phase));
+      stft[windowIndex][freqIndex].imag(mag * std::sin(phase));
+    }
+  }
 }
 
 
