@@ -20,7 +20,7 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   double fund = fundamental(bufferVector, 44100);
 
   // SFTF the buffer
-  std::vector<CVector> stft = SFTF(bufferVector);
+  std::vector<CVector> stft = SFTF(bufferVector, 2048, 4);
 
   // Construct array of actual frequencies of each bin
   // based on how the phase changes in the same bin between windows
