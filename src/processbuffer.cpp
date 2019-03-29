@@ -1,5 +1,7 @@
 #include "processbuffer.h"
 
+#include "processstft.h"
+
 void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   int k, chan;
 
@@ -17,8 +19,15 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   // Calculate the fundamental frequency
   double fund = fundamental(bufferVector, 44100);
 
+  // SFTF the buffer
+  std::vector<CVector> stft = SFTF(bufferVector);
+
   // Construct array of actual frequencies of each bin
   // based on how the phase changes in the same bin between windows
+  std::vector< std::vector<double> > actualFreqs;
+  std::vector< std::vector<double> > magnitudes;
+
+  processSTFT(stft, actualFreqs, magnitudes);
 
   // Construct array of magnitudes
 
