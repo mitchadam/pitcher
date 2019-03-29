@@ -86,6 +86,16 @@ void processSTFT(std::vector<CVector> &stft,
           phaseDiff * ((double)overlapFactor) * freqPerBin / (2 * M_PI);
     }
   }
+
+  // DO PITCH SHIFTING HERE
+  // Do resampling to shift pitch
+  // Simply move magnitudes to new indeces
+  // Move AND scale actual frequencies
+
+  // Convert actual frequencies back to array of phases
+
+  // Use phase and magnitudes to calculate re and im parts
+
 }
 
 
