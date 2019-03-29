@@ -6,25 +6,31 @@
 // Final Project
 // -------------------------------------------------
 #include "fourier.h"
+// #include <iostream> // remove
 
 /*
 implementation of Short time fourier transform
 */
-std::vector<CVector> SFTF(CVector& signal){
-    // This will change the resolution
+std::vector<CVector> SFTF(CVector& signal, int sampleSize, int overlap){
     // Sample rate is always 44.1 kHz
-    int sampleSize = 2048;
+    // Signal Size determines resolution
+
     int n = signal.size();
     // This will be a vector of the fft of each window
     std::vector<CVector> windowFFTS;
 
     // Create a window every half window size
-    for (size_t i = 0; i <=n; i += sampleSize/2) {
+    for (size_t i = 0; i <=n; i += sampleSize/overlap) {
         // Uses hann window function to create window, zero
         //everywhere outside of window
         CVector scalingWindow = createWindow(n, i, sampleSize);
+        // DEBUGGING
+        // std::cout << "Creating a new window with center: " << i << std::endl;
+        // for(int i =0; i < n; i++){
+        //     std::cout << scalingWindow[i] << " ";
+        // }
+        // std::cout << std::endl;
         CVector signalWindow = signal * scalingWindow;
-
         FFT(signalWindow);
         windowFFTS.push_back(signalWindow);
     }
@@ -39,24 +45,20 @@ std::vector<CVector> SFTF(CVector& signal){
 CVector createWindow(int n, int center, int size){
     CVector scaling;
     scaling.resize(n,0);
-    //Start and end points of each window
-    int start = center - size/2;
-    int end = center + size/2-1;
-    int j = 0;
 
-    //Handle Edge cases of first and last window
-    if(center == 0){
-        start = 0;
-        end = size/2-1;
-    }else if (center == n){
-        start = n-size/2;
-        end = n-1;
+    // Go backwards from center
+    for(int i = 1; i <= size/2; i++){
+        if (center - i < 0){
+            break;
+        }
+        scaling[center -i]= {0.5 * (1 - cos(2*PI*(size/2-i)/(size-1))),0};
     }
-    // If outside start and end value will be zero
-    for(int i = start; i <= end; i ++){
-        // Set scaling value if inside the window
-        scaling[i]= {0.5 * (1 - cos(2*PI*j/(size-1))),0};
-        j++;
+    // Go forwards from center
+    for(int i =0; i <= size/2-1;i++){
+        if(center + i >= n){
+            break;
+        }
+        scaling[center + i]= {0.5 * (1 - cos(2*PI*(size/2+i)/(size-1))),0};
     }
     return scaling;
 }
