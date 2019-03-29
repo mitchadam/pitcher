@@ -32,4 +32,5 @@ References:
     * Used following websites to learn and implement Cooley-Tukey FFT algorithm:
         https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm
         http://www.drdobbs.com/cpp/a-simple-and-efficient-fft-implementatio/199500857
+	http://blogs.zynaptiq.com/bernsee/pitch-shifting-using-the-ft/
 
