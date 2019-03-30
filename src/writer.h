@@ -21,7 +21,7 @@ public:
   Writer(std::string filename, double *buffer, std::size_t bufferLen,
          SF_INFO &sfinfo);
   bool open();
-  int write();
+  int write(std::size_t writeCount);
   void close();
 
 private:

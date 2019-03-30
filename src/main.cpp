@@ -15,7 +15,7 @@
 #include <complex>
 #include <iostream>
 
-constexpr std::size_t bufferLen = 4096;
+constexpr std::size_t bufferLen = 65536;
 
 int main() {
   double *buffer = new double[bufferLen];
@@ -29,9 +29,10 @@ int main() {
   writer.open();
 
   int readCount;
+  int writeCount;
   while ((readCount = reader.read())) {
     processBuffer(buffer, bufferLen, reader.getsfinfo().channels);
-    writer.write();
+    writeCount = writer.write(readCount);
   }
 
   reader.close();

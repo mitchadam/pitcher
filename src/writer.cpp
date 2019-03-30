@@ -33,10 +33,11 @@ bool Writer::open() {
 
 /**
  * Writes data from buffer into file.
+ * @param writeCount The number of samples to write
  * Returns number of items written
  */
-int Writer::write() {
-  return sf_write_double(file, buffer, bufferLen);
+int Writer::write(std::size_t writeCount) {
+  return sf_write_double(file, buffer, writeCount);
 }
 
 void Writer::close() {
