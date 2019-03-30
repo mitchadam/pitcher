@@ -21,14 +21,14 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
 
   // SFTF the buffer
   std::size_t windowSize = 2048;
-  std::size_t overlapFactor = 4;
+  std::size_t overlapFactor = 8;
   std::vector<CVector> stft = SFTF(bufferVector, windowSize, overlapFactor);
 
   double pitchScaleFactor = 2;
   processSTFT(stft, windowSize, overlapFactor, pitchScaleFactor);
 
   // Inverse STFT
-  bufferVector = ISFTF(stft, 2048, 4);
+  bufferVector = ISFTF(stft, windowSize, overlapFactor);
 
   // compensates for increase in amplitude do to overlapping windows
   double gain = 0.5;
