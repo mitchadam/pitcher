@@ -32,5 +32,8 @@ References:
     * Used following websites to learn and implement Cooley-Tukey FFT algorithm:
         https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm
         http://www.drdobbs.com/cpp/a-simple-and-efficient-fft-implementatio/199500857
+    * Using the fft to implement stft and a phase vocoder
 	http://blogs.zynaptiq.com/bernsee/pitch-shifting-using-the-ft/
+    * Converting frequency to a musical note
+	https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
 
