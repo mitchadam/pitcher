@@ -22,26 +22,9 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   // SFTF the buffer
   std::vector<CVector> stft = SFTF(bufferVector, 2048, 4);
 
-  // Construct array of actual frequencies of each bin
-  // based on how the phase changes in the same bin between windows
-  std::vector< std::vector<double> > actualFreqs;
-  std::vector< std::vector<double> > magnitudes;
+  processSTFT(stft, 2);
 
-  processSTFT(stft, actualFreqs, magnitudes);
-
-  // Construct array of magnitudes
-
-  // Do resampling to shift pitch
-  // Simply move magnitudes to new indeces
-  // Move AND scale actual frequencies
-
-  // Convert actual frequencies back to array of phases
-
-  // Use phase and magnitudes to calculate re and im parts
-
-  // Inverse FFT each window
-
-  // Add windows back together
+  // Inverse STFT
 
   return;
 }
