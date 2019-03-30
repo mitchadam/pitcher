@@ -98,6 +98,42 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
   // Simply move magnitudes to new indeces
   // Move AND scale actual frequencies
 
+  // Create and initialize vectors to store the resampled magnitudes and
+  // frequencies
+  std::vector< std::vector<double> > newMags;
+  newMags.resize(windowCount);
+  for (std::size_t i = 0; i < windowCount; i++) {
+    newMags[i].resize(bufferLen);
+    std::fill(newMags[i].begin(), newMags[i].end(), 0);
+  }
+  std::vector< std::vector<double> > newFreqs;
+  newFreqs.resize(windowCount);
+  for (std::size_t i = 0; i < windowCount; i++) {
+    newFreqs[i].resize(bufferLen);
+    std::fill(newFreqs[i].begin(), newFreqs[i].end(), 0);
+  }
+
+  // New index used to scale frequency domain
+  std::size_t newFreqIndex;
+  // Loop across frequency bins
+  for (std::size_t freqIndex = 0; freqIndex < bufferLen; freqIndex++) {
+    // Loop across stft windows
+    for (std::size_t windowIndex = 0; windowIndex < stft.size();
+         windowIndex++) {
+      // Calculate new index based on scale factor
+      newFreqIndex = freqIndex * pitchScaleFactor;
+      // Check if new index is within bounds
+      if (newFreqIndex < bufferLen) {
+        // Move magnitude to new index
+        newMags[windowIndex][newFreqIndex] +=
+            magnitudes[windowIndex][freqIndex];
+        // Move and scale frequency
+        newFreqs[windowIndex][newFreqIndex] +=
+            actualFreqs[windowIndex][freqIndex] * pitchScaleFactor;
+      }
+    }
+  }
+
   // Update the stft representation based on the new magnitudes and frequencies
   // - Convert actual frequencies back to array of phases
   // - Use phase and magnitudes to calculate re and im parts
@@ -114,7 +150,7 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
     for (std::size_t windowIndex = 0; windowIndex < stft.size();
          windowIndex++) {
       // Subtract ideal bin frequency to get change in frequency
-      double deltaFreq = actualFreqs[windowIndex][freqIndex] -
+      double deltaFreq = newFreqs[windowIndex][freqIndex] -
                          ((double)freqIndex) * freqPerBin;
 
       // Convert change in frequency to actual change in phase
@@ -132,7 +168,7 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
       double phase = phaseAccum[freqIndex];
 
       // Calculate real and imaginary parts of stft bin
-      double mag = magnitudes[windowIndex][freqIndex];
+      double mag = newMags[windowIndex][freqIndex];
       stft[windowIndex][freqIndex].real(mag * std::cos(phase));
       stft[windowIndex][freqIndex].imag(mag * std::sin(phase));
     }
