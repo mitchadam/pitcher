@@ -7,10 +7,10 @@
 // -------------------------------------------------
 #include "fourier.h"
 
-void applyIFFT(CVector& z){
-    IFFT(z);
-    z/=z.size();
-}
+// void applyIFFT(CVector& z){
+//     IFFT(z);
+//     z/=z.size();
+// }
 
 void IFFT(CVector& z){
     const size_t n = z.size();
@@ -37,4 +37,19 @@ void IFFT(CVector& z){
         z[i] = zeven[i] + g;
         z[i+n/2]= zeven[i] - g;
     }
+}
+
+void applyIFFT(CVector& x)
+{
+    // conjugate the complex numbers
+    x = x.apply(std::conj);
+
+    // forward fft
+    FFT(x);
+
+    // conjugate the complex numbers again
+    x = x.apply(std::conj);
+
+    // scale the numbers
+    x /= x.size();
 }

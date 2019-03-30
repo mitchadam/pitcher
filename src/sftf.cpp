@@ -6,7 +6,7 @@
 // Final Project
 // -------------------------------------------------
 #include "fourier.h"
-// #include <iostream> // remove
+#include <iostream> // remove
 
 /*
 implementation of Short time fourier transform
@@ -20,18 +20,29 @@ std::vector<CVector> SFTF(CVector& signal, int sampleSize, int overlap){
     std::vector<CVector> windowFFTS;
 
     // Create a window every half window size
-    for (size_t i = 0; i <=n; i += sampleSize/overlap) {
+    for (int i = -sampleSize/2; i <=(n+sampleSize/2); i += sampleSize/overlap) {
         // Uses hann window function to create window, zero
         //everywhere outside of window
-        CVector scalingWindow = createWindow(n, i, sampleSize);
-        // DEBUGGING
         // std::cout << "Creating a new window with center: " << i << std::endl;
+        CVector scalingWindow = createWindow(n, i, sampleSize);
+        CVector signalWindow = signal * scalingWindow;
         // for(int i =0; i < n; i++){
-        //     std::cout << scalingWindow[i] << " ";
+        //     // if(i >=0 && i <n){
+        //     //     std::cout << scalingWindow[i] << " ";
+        //     // }
+        // }
+        FFT(signalWindow);
+        // DEBUGGING
+        // for(int i =0; i < n; i++){
+        //     std::cout << signalWindow[i] << " ";
         // }
         // std::cout << std::endl;
-        CVector signalWindow = signal * scalingWindow;
-        FFT(signalWindow);
+        // std::cout << std::endl;
+        // applyIFFT(signalWindow);
+        // for(int i =0; i < n; i++){
+        //     std::cout << signalWindow[i] << " ";
+        // }
+        // std::cout << std::endl;
         windowFFTS.push_back(signalWindow);
     }
     return windowFFTS;
@@ -48,17 +59,15 @@ CVector createWindow(int n, int center, int size){
 
     // Go backwards from center
     for(int i = 1; i <= size/2; i++){
-        if (center - i < 0){
-            break;
+        if ((center - i ) >= 0 && (center-i) < n){
+            scaling[center -i]= {0.5 * (1 - cos(2*PI*(size/2-i)/(size-1))),0};
         }
-        scaling[center -i]= {0.5 * (1 - cos(2*PI*(size/2-i)/(size-1))),0};
     }
     // Go forwards from center
     for(int i =0; i <= size/2-1;i++){
-        if(center + i >= n){
-            break;
+        if((center + i) < n && (center + i >= 0)){
+            scaling[center + i]= {0.5 * (1 - cos(2*PI*(size/2+i)/(size-1))),0};
         }
-        scaling[center + i]= {0.5 * (1 - cos(2*PI*(size/2+i)/(size-1))),0};
     }
     return scaling;
 }

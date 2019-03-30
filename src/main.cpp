@@ -37,7 +37,7 @@ int main() {
   // reader.close();
   // writer.close();
   //
-  // CVector varr = {{10,0}, {2,0}, {20,0}, {1,0} };
+  // CVector varr = {{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{75,0},{75,0}};
   // std::cout <<"Inital: "<< std::endl;
   //
   // for(int i =0; i < varr.size(); i++){
@@ -58,8 +58,29 @@ int main() {
   // }
   // std::cout << std::endl;
   CVector tester;
-  tester.resize(16,100);
-  int sampleSize = 4;
+  CVector Sum;
+  int size = 32768;
+  Sum.resize(size,0);
+  int sampleSize = 2048;
   int overlap = 4;
+  tester.resize(size,100);
   std::vector<CVector> test = SFTF(tester, sampleSize, overlap);
+
+  // for (size_t i = 0; i < test[0].size(); i++) {
+  //     //Loop through the windows
+  //     for (size_t j = 0; j < test.size(); j++) {
+  //         // Set weach ouput bin as sum of corresponding window bins
+  //         Sum[i] += test[j][i];
+  //     }
+  // }
+  // for(int i =0; i <size; i++){
+  //     std::cout << Sum[i] << " ";
+  // }
+  std::cout << std::endl;
+  std::cout << std::endl;
+  CVector output = ISFTF(test, sampleSize, overlap);
+  for(int i = 0; i < size; i ++){
+      std::cout << output[i] << " ";
+  }
+  std::cout << std::endl;
 }

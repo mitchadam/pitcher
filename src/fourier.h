@@ -48,4 +48,9 @@ std::vector<CVector> SFTF(CVector& z, int sampleSize, int overlap);
     Used by STFT to create the windows of a signal
 */
 CVector createWindow(int n, int center, int size);
+/*
+    Inverse SFTF
+    First does the IFFT and then adds the windows back up
+*/
+CVector ISFTF (std::vector<CVector> windowFFTS, int sampleSize, int overlap);
 #endif
