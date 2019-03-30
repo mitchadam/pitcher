@@ -30,11 +30,13 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   // Inverse STFT
   bufferVector = ISFTF(stft, 2048, 4);
 
+  // compensates for increase in amplitude do to overlapping windows
+  double gain = 0.5;
   // Covert CVector back into array of doubles
   for (chan = 0; chan < channels; chan++) {
     for (k = chan; k < bufferLen; k += channels) {
       // Convert each value in the buffer into a complex number
-      buffer[k] = bufferVector[k].real();
+      buffer[k] = bufferVector[k].real() * gain;
     }
   }
 
