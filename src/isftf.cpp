@@ -6,14 +6,12 @@
 // Final Project
 // -------------------------------------------------
 #include "fourier.h"
-#include <iostream>
 
 CVector ISFTF (std::vector<CVector> windowFFTS, int sampleSize, int overlap){
     CVector outputSignal;
     size_t n = windowFFTS[0].size();
     outputSignal.resize(n,0);
 
-    std::cout << windowFFTS[0].size() << std::endl;
     for (size_t i = 0; i < windowFFTS.size(); i++) {
         //Inverse FT each window first
         applyIFFT(windowFFTS[i]);
