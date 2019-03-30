@@ -14,10 +14,8 @@
 #include "fourier.h" // CVector
 
 /**
- * Computes corrected bin frequencies and bin magnitudes from stft
+ * Does desired pitch shifting in the frequency domain
  */
-void processSTFT(std::vector<CVector> &stft,
-                 std::vector<std::vector<double>> &actualFreqs,
-                 std::vector<std::vector<double>> &magnitudes);
+void processSTFT(std::vector<CVector> &stft, double pitchScaleFactor);
 
 #endif

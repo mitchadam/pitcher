@@ -13,9 +13,7 @@
 // Forward declaration
 double constrainAngle(double angle);
 
-void processSTFT(std::vector<CVector> &stft,
-                 std::vector<std::vector<double>> &actualFreqs,
-                 std::vector<std::vector<double>> &magnitudes) {
+void processSTFT(std::vector<CVector> &stft, double pitchScaleFactor) {
 
   double sampleRate = 44100;
 
@@ -37,10 +35,18 @@ void processSTFT(std::vector<CVector> &stft,
   //      then overlapFactor = 4
   std::size_t overlapFactor = windowLen / windowStride;
 
-  // Ensure actualFreqs and magnitudes vectors have length equal to the number
-  // of bins (which is the same as bufferLen)
-  actualFreqs.resize(bufferLen);
-  magnitudes.resize(bufferLen);
+  // Ensure actualFreqs and magnitudes vectors have correct size
+  // Outer index is window, inner is freqency bin
+  std::vector< std::vector<double>> actualFreqs;
+  actualFreqs.resize(stft.size());
+  for (std::size_t i = 0; i < stft.size(); i++) {
+    actualFreqs[i].resize(bufferLen);
+  }
+  std::vector< std::vector<double>> magnitudes;
+  magnitudes.resize(stft.size());
+  for (std::size_t i = 0; i < stft.size(); i++) {
+    magnitudes[i].resize(bufferLen);
+  }
 
   // Store previous previous of each bin as we loop through windows
   std::vector<double> previousPhase;
