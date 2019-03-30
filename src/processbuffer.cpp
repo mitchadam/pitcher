@@ -1,6 +1,15 @@
+// -------------------------------------------------
+// Name: Mitchell Adam, Ryan Shukla
+// ID: 1528592, 1537980
+// CMPUT 275, Winter 2018
+//
+// Final Project
+// -------------------------------------------------
+
 #include "processbuffer.h"
 
 #include "processstft.h"
+#include "targetfreq.h"
 
 void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   int k, chan;
@@ -19,6 +28,11 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   // Calculate the fundamental frequency
   double fund = fundamental(bufferVector, 44100);
 
+  // Calculate the target freqency and scale factor
+  Key key = C;
+  double target = getTargetFreq(fund, key);
+  double pitchScaleFactor = target / fund;
+
   // Taper the edges of the buffer
   CVector window = createWindow(bufferLen, bufferLen / 2, bufferLen);
   bufferVector *= window;
@@ -28,7 +42,6 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   std::size_t overlapFactor = 8;
   std::vector<CVector> stft = SFTF(bufferVector, windowSize, overlapFactor);
 
-  double pitchScaleFactor = 1.5;
   processSTFT(stft, windowSize, overlapFactor, pitchScaleFactor);
 
   // Inverse STFT
