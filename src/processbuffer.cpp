@@ -19,12 +19,16 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   // Calculate the fundamental frequency
   double fund = fundamental(bufferVector, 44100);
 
+  // Taper the edges of the buffer
+  CVector window = createWindow(bufferLen, bufferLen / 2, bufferLen);
+  bufferVector *= window;
+
   // SFTF the buffer
   std::size_t windowSize = 2048;
   std::size_t overlapFactor = 8;
   std::vector<CVector> stft = SFTF(bufferVector, windowSize, overlapFactor);
 
-  double pitchScaleFactor = 2;
+  double pitchScaleFactor = 1.5;
   processSTFT(stft, windowSize, overlapFactor, pitchScaleFactor);
 
   // Inverse STFT
