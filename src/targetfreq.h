@@ -9,6 +9,7 @@
 #ifndef _TARGET_FREQ_H_
 #define _TARGET_FREQ_H_
 
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -64,6 +65,25 @@ static const std::unordered_map<Key, std::unordered_set<int>> keyToSemitones{
     {A, {note_a, note_b, note_db, note_d, note_e, note_gb, note_ab}},
     {Bb, {note_bb, note_c, note_d, note_eb, note_f, note_g, note_a}},
     {B, {note_b, note_db, note_eb, note_e, note_gb, note_ab, note_bb}},
+};
+
+/**
+ * Maps string to a Key enum type.
+ * Used to parse command line args.
+ */
+static const std::unordered_map<std::string, Key> stringToKey {
+  {"c", C,},
+  {"db", Db},
+  {"d", D},
+  {"eb", Eb},
+  {"e", E},
+  {"f", F},
+  {"gb", Gb},
+  {"g", G},
+  {"ab", Ab},
+  {"a", A},
+  {"bb", Bb},
+  {"b", B},
 };
 
 /**

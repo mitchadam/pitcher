@@ -9,9 +9,11 @@
 #include "processbuffer.h"
 
 #include "processstft.h"
-#include "targetfreq.h"
 
-void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
+#include <iostream> // TODO remove
+
+void processBuffer(double *buffer, std::size_t bufferLen, int channels,
+                   Key key) {
   int k, chan;
 
   // Construct a valarray of complex numbers from the input buffer
@@ -29,9 +31,13 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   double fund = fundamental(bufferVector, 44100);
 
   // Calculate the target freqency and scale factor
-  Key key = C;
   double target = getTargetFreq(fund, key);
   double pitchScaleFactor = target / fund;
+
+  std::cout << "fund: " << fund << std::endl;
+  std::cout << "target: " << target << std::endl;
+  std::cout << "scale: " << pitchScaleFactor << std::endl;
+  std::cout << std::endl;
 
   // Taper the edges of the buffer
   CVector window = createWindow(bufferLen, bufferLen / 2, bufferLen);

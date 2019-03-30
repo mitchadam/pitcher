@@ -11,6 +11,7 @@
 
 #include "fourier.h"
 #include "fundamental.h"
+#include "targetfreq.h"
 
 /**
  * Does all signal processing on buffer.
@@ -19,6 +20,7 @@
  * @param bufferLen Length of the buffer
  * @param channels Number of audio channels in buffer
  */
-void processBuffer(double *buffer, std::size_t bufferLen, int channels);
+void processBuffer(double *buffer, std::size_t bufferLen, int channels,
+                   Key key);
 
 #endif

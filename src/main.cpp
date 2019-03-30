@@ -11,17 +11,38 @@
 #include "reader.h"
 #include "writer.h"
 #include "processbuffer.h"
+#include "targetfreq.h" // Key type
 #include <valarray>
 #include <complex>
 #include <iostream>
 
 constexpr std::size_t bufferLen = 4096;
 
-int main() {
+int main(int argc, char *argv[]) {
+  // Parse command line args
+  std::string inputFileName;
+  std::string keyString;
+  if (argc == 3) {
+    inputFileName = argv[1];
+    keyString = argv[2];
+  }
+  else {
+    std::cout << "Usage: pitcher [filename] [key]" << std::endl;
+    return 1;
+  }
+
+  // Map command line arg to a Key enum type
+  if (stringToKey.find(keyString) == stringToKey.end()) {
+    std::cout << "Error: unrecognized key." << std::endl;
+    return 1;
+  }
+  Key key = stringToKey.at(keyString);
+
+  // Allocate buffer to read sound file into
   double *buffer = new double[bufferLen];
-  Reader reader("violin.wav", buffer, bufferLen);
+  Reader reader(inputFileName, buffer, bufferLen);
   if (!reader.open()) {
-    std::cout << "Failed to open file." << std::endl;
+    std::cout << "Error: Failed to open file." << std::endl;
     return 1;
   }
   // Need to pass the SF_INFO struct from the reader to the writer
@@ -31,7 +52,7 @@ int main() {
   int readCount;
   int writeCount;
   while ((readCount = reader.read())) {
-    processBuffer(buffer, bufferLen, reader.getsfinfo().channels);
+    processBuffer(buffer, bufferLen, reader.getsfinfo().channels, key);
     writeCount = writer.write(readCount);
   }
 
