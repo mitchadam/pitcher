@@ -25,6 +25,15 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   processSTFT(stft, 2);
 
   // Inverse STFT
+  bufferVector = ISFTF(stft, 2048, 4);
+
+  // Covert CVector back into array of doubles
+  for (chan = 0; chan < channels; chan++) {
+    for (k = chan; k < bufferLen; k += channels) {
+      // Convert each value in the buffer into a complex number
+      buffer[k] = bufferVector[k].real();
+    }
+  }
 
   return;
 }
