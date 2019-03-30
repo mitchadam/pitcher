@@ -13,8 +13,16 @@
 // Forward declaration
 double constrainAngle(double angle);
 
-void processSTFT(std::vector<CVector> &stft, double pitchScaleFactor) {
+/**
+ * @param windowSize The size of a window in the stft
+ * @param overlapFactor Amount of overlap between windows
+ *   e.g. If the next window starts 1/4 of the way into the current window,
+ *   then overlapFactor = 4
+ */
+void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
+                 std::size_t overlapFactor, double pitchScaleFactor) {
 
+  // TODO don't hard code
   double sampleRate = 44100;
 
   // Length of the buffer in samples (time domain length is same as freq domain
@@ -22,29 +30,26 @@ void processSTFT(std::vector<CVector> &stft, double pitchScaleFactor) {
   std::size_t bufferLen = stft[0].size();
 
   // frequency of bin 1
-  double freqPerBin = sampleRate / bufferLen;
+  double freqPerBin = sampleRate / ((double)bufferLen);
 
-  // Length of a window in samples
-  std::size_t windowLen = stft.size();
+  // Number of windows in the stft
+  std::size_t windowCount = stft.size();
 
   // Number of samples between start of a window and the next window
-  std::size_t windowStride = bufferLen / windowLen;
+  // TODO account for edges
+  std::size_t windowStride = bufferLen / windowCount;
 
-  // Amount of overlap between windows
-  // e.g. If the next window starts 1/4 of the way into the current window,
-  //      then overlapFactor = 4
-  std::size_t overlapFactor = windowLen / windowStride;
 
   // Ensure actualFreqs and magnitudes vectors have correct size
   // Outer index is window, inner is freqency bin
-  std::vector< std::vector<double>> actualFreqs;
-  actualFreqs.resize(stft.size());
-  for (std::size_t i = 0; i < stft.size(); i++) {
+  std::vector< std::vector<double> > actualFreqs;
+  actualFreqs.resize(windowCount);
+  for (std::size_t i = 0; i < windowCount; i++) {
     actualFreqs[i].resize(bufferLen);
   }
-  std::vector< std::vector<double>> magnitudes;
-  magnitudes.resize(stft.size());
-  for (std::size_t i = 0; i < stft.size(); i++) {
+  std::vector< std::vector<double> > magnitudes;
+  magnitudes.resize(windowCount);
+  for (std::size_t i = 0; i < windowCount; i++) {
     magnitudes[i].resize(bufferLen);
   }
 
@@ -53,32 +58,27 @@ void processSTFT(std::vector<CVector> &stft, double pitchScaleFactor) {
   // TODO what to initialize previous to?
   previousPhase.resize(bufferLen, 0);
 
-  // Phase of current bin
-  double phase;
-  // Phase difference from previous bin
-  double phaseDiff;
-  // Expected phase difference between windows based on window overlap
-  double expectedDiff;
-
   // Loop across frequency bins
   for (std::size_t freqIndex = 0; freqIndex < bufferLen; freqIndex++) {
     // Loop across stft windows
-    for (std::size_t windowIndex = 0; windowIndex < stft.size();
+    for (std::size_t windowIndex = 0; windowIndex < windowCount;
          windowIndex++) {
+
       // Calculate magnitude of the bin
       magnitudes[windowIndex][freqIndex] =
           std::abs(stft[windowIndex][freqIndex]);
+
       // Calculate phase of bin
-      phase = std::arg(stft[windowIndex][freqIndex]);
+      double phase = std::arg(stft[windowIndex][freqIndex]);
 
       // Calculate phase difference between current window and previous window
-      phaseDiff = phase - previousPhase[freqIndex];
+      double phaseDiff = phase - previousPhase[freqIndex];
       previousPhase[freqIndex] = phase;
 
       // Calculate the expected phase difference based on the overlap between
       // windows
-      expectedDiff = ((double)freqIndex) * 2 * M_PI * ((double)windowStride) /
-                     ((double)bufferLen);
+      double expectedDiff = ((double)freqIndex) * 2 * M_PI *
+                            ((double)windowStride) / ((double)bufferLen);
 
       // Correct phaseDiff by accounting for expectedDiff
       phaseDiff -= expectedDiff;
@@ -138,7 +138,6 @@ void processSTFT(std::vector<CVector> &stft, double pitchScaleFactor) {
     }
   }
 }
-
 
 /**
  * Maps an angle in radians to the interval [-pi, pi]

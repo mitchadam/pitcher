@@ -15,7 +15,7 @@
 #include <complex>
 #include <iostream>
 
-constexpr std::size_t bufferLen = 32768;
+constexpr std::size_t bufferLen = 4096;
 
 int main() {
   double *buffer = new double[bufferLen];

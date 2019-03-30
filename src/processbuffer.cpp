@@ -20,9 +20,12 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels) {
   double fund = fundamental(bufferVector, 44100);
 
   // SFTF the buffer
-  std::vector<CVector> stft = SFTF(bufferVector, 2048, 4);
+  std::size_t windowSize = 2048;
+  std::size_t overlapFactor = 4;
+  std::vector<CVector> stft = SFTF(bufferVector, windowSize, overlapFactor);
 
-  processSTFT(stft, 2);
+  double pitchScaleFactor = 2;
+  processSTFT(stft, windowSize, overlapFactor, pitchScaleFactor);
 
   // Inverse STFT
   bufferVector = ISFTF(stft, 2048, 4);

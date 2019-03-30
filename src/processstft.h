@@ -15,7 +15,16 @@
 
 /**
  * Does desired pitch shifting in the frequency domain
+ *
+ * @param stft The short time Fourier Transform representation of the signal
+ * @param windowSize The size of a window in the stft
+ * @param overlapFactor Amount of overlap between windows
+ *   e.g. If the next window starts 1/4 of the way into the current window,
+ *   then overlapFactor = 4
+ * @param pitchScaleFactor The amount to multiply all the frequency components
+ * of the signal
  */
-void processSTFT(std::vector<CVector> &stft, double pitchScaleFactor);
+void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
+                 std::size_t overlapFactor, double pitchScaleFactor);
 
 #endif
