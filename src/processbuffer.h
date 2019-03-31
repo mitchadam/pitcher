@@ -19,8 +19,9 @@
  * @param buffer Pointer to the start of the buffer
  * @param bufferLen Length of the buffer
  * @param channels Number of audio channels in buffer
+ * @param key The musical key of the piece
  */
 void processBuffer(double *buffer, std::size_t bufferLen, int channels,
-                   Key key);
+                   int key);
 
 #endif

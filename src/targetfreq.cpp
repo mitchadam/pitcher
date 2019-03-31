@@ -10,7 +10,7 @@
 
 #include "targetfreq.h"
 
-double getTargetFreq(double actualFreq, Key key) {
+double getTargetFreq(double actualFreq, int key) {
   // Frequency in Hz of A4
   double A4 = 440;
   // Frequency in Hz of C0
@@ -39,12 +39,16 @@ double getTargetFreq(double actualFreq, Key key) {
   // If the semitone is in the key, use it
   // If not, move one semitone over, depending on whether we rounded up or down
   if (keySet.find(semitone) == keySet.end()) {
-    targetSemitone = semitone;
-  } else if (roundedUp) {
-    targetSemitone = semitone - 1;
+    // Note is not in key
+    if (roundedUp) {
+      targetSemitone = semitone - 1;
+    } else {
+      targetSemitone = semitone + 1;
+    }
   } else {
-    targetSemitone = semitone + 1;
+    targetSemitone = semitone;
   }
+
   // Ensure targetSemitone is in range [0, 11]
   if (targetSemitone < 0) {
     targetSemitone += 12;

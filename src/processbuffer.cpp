@@ -13,7 +13,7 @@
 #include <iostream> // TODO remove
 
 void processBuffer(double *buffer, std::size_t bufferLen, int channels,
-                   Key key) {
+                   int key) {
   int k, chan;
 
   // Construct a valarray of complex numbers from the input buffer
