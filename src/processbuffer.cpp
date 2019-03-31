@@ -9,6 +9,7 @@
 #include "processbuffer.h"
 
 #include "processstft.h"
+#include "filter.h"
 
 #include <iostream> // TODO remove
 
@@ -48,13 +49,21 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels,
   std::size_t overlapFactor = 8;
   std::vector<CVector> stft = SFTF(bufferVector, windowSize, overlapFactor);
 
-  processSTFT(stft, windowSize, overlapFactor, pitchScaleFactor);
+  processSTFT(stft, windowSize, overlapFactor, 2);
+
+  // Apply low pass filter to reduce noise
+  //CVector lpf = lowPassTransferFunction(100, bufferLen, 44100);
+  //for (auto &freqSignal : stft) {
+  //  freqSignal *= lpf;
+  //}
 
   // Inverse STFT
   bufferVector = ISFTF(stft, windowSize, overlapFactor);
 
+  // Low pass filter for noise reduction
+
   // compensates for increase in amplitude do to overlapping windows
-  double gain = 0.5;
+  double gain = 0.25;
   // Covert CVector back into array of doubles
   for (chan = 0; chan < channels; chan++) {
     for (k = chan; k < bufferLen; k += channels) {
