@@ -19,7 +19,7 @@ CVector lowPassTransferFunction(double cutoff, std::size_t length,
   // RC factor of low pass system
   double RC = 2 * M_PI * cutoff;
   RC = 1 / RC;
-  
+
   CVector output;
   output.resize(length, 0);
 
@@ -41,7 +41,7 @@ CVector highPassTransferFunction(double cutoff, std::size_t length,
   // RC factor of high pass system
   double RC = 2 * M_PI * cutoff;
   RC = 1 / RC;
-  
+
   CVector output;
   output.resize(length, 0);
 

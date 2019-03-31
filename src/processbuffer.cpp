@@ -60,19 +60,22 @@ if( mode == "tune"){
     // Apply low pass filter to reduce noise
     CVector lpf = lowPassTransferFunction(cutoff, bufferLen, sampleRate);
     for (auto &freqSignal : stft) {
-      // gain to make up for filter
-      double gain = 2;
       freqSignal *= lpf;
-      freqSignal *= gain;
     }
 
 }else if (mode == "hpf"){
     // std::cout << "High Pass Filter..." << std::endl;
     int cutoff = std::stoi(option);
+    // Apply high pass filter to reduce noise
+    CVector hpf = highPassTransferFunction(cutoff, bufferLen, sampleRate);
+    for (auto &freqSignal : stft) {
+      freqSignal *= hpf;
+    }
 }
+
   // Inverse STFT
   bufferVector = ISFTF(stft, windowSize, overlapFactor);
-  // compensates for increase in amplitude do to overlapping windows
+  // Compensates for increase in amplitude do to overlapping windows
   double gain = 0.25;
   // Covert CVector back into array of doubles
   for (chan = 0; chan < channels; chan++) {
