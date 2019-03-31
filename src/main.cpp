@@ -51,8 +51,11 @@ int main(int argc, char *argv[]) {
 
   int readCount;
   int writeCount;
+  std::vector<double> *previousPhase = new std::vector<double>;
+  previousPhase->resize(bufferLen, 7);
   while ((readCount = reader.read())) {
-    processBuffer(buffer, bufferLen, reader.getsfinfo().channels, key);
+    processBuffer(buffer, bufferLen, reader.getsfinfo().channels, key,
+                  previousPhase);
     writeCount = writer.write(readCount);
   }
 

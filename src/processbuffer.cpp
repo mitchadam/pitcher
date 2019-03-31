@@ -14,7 +14,7 @@
 #include <iostream> // TODO remove
 
 void processBuffer(double *buffer, std::size_t bufferLen, int channels,
-                   int key) {
+                   int key, std::vector<double> *previousPhase) {
   int k, chan;
 
   // Construct a valarray of complex numbers from the input buffer
@@ -49,7 +49,7 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels,
   std::size_t overlapFactor = 16;
   std::vector<CVector> stft = SFTF(bufferVector, windowSize, overlapFactor);
 
-  processSTFT(stft, windowSize, overlapFactor, 2);
+  processSTFT(stft, windowSize, overlapFactor, 2, previousPhase);
 
   // Apply low pass filter to reduce noise
   CVector lpf = lowPassTransferFunction(100, bufferLen, 44100);

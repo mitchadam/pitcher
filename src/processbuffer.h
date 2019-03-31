@@ -22,6 +22,6 @@
  * @param key The musical key of the piece
  */
 void processBuffer(double *buffer, std::size_t bufferLen, int channels,
-                   int key);
+                   int key, std::vector<double> *previousPhase);
 
 #endif

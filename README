@@ -36,4 +36,6 @@ References:
 	http://blogs.zynaptiq.com/bernsee/pitch-shifting-using-the-ft/
     * Converting frequency to a musical note
 	https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
+    * Truncating angles
+        https://stackoverflow.com/questions/11498169/dealing-with-angle-wrap-in-c-code
 

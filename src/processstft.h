@@ -25,6 +25,7 @@
  * of the signal
  */
 void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
-                 std::size_t overlapFactor, double pitchScaleFactor);
+                 std::size_t overlapFactor, double pitchScaleFactor,
+                 std::vector<double> *previousPhase);
 
 #endif

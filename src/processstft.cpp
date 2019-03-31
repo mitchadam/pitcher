@@ -10,6 +10,8 @@
 
 #include "processstft.h"
 
+#include <iostream>
+
 // Forward declaration
 double constrainAngle(double angle);
 
@@ -20,7 +22,8 @@ double constrainAngle(double angle);
  *   then overlapFactor = 4
  */
 void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
-                 std::size_t overlapFactor, double pitchScaleFactor) {
+                 std::size_t overlapFactor, double pitchScaleFactor,
+                 std::vector<double> *previousPhase) {
 
   // TODO don't hard code
   double sampleRate = 44100;
@@ -29,7 +32,7 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
   // length)
   std::size_t bufferLen = stft[0].size();
 
-  // frequency of bin 1
+  // frequency of bin 1 in Hz
   double freqPerBin = sampleRate / ((double)bufferLen);
 
   // Number of windows in the stft
@@ -37,7 +40,7 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
 
   // Number of samples between start of a window and the next window
   // TODO account for edges
-  std::size_t windowStride = bufferLen / windowCount;
+  std::size_t windowStride = windowSize / overlapFactor;
 
 
   // Ensure actualFreqs and magnitudes vectors have correct size
@@ -53,14 +56,14 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
     magnitudes[i].resize(bufferLen);
   }
 
-  // Store previous previous of each bin as we loop through windows
-  std::vector<double> previousPhase;
-  // TODO what to initialize previous to?
-  previousPhase.resize(bufferLen, 0);
-
   // Loop across frequency bins
+  std::cout << "--------------------New outer" << std::endl;
   for (std::size_t freqIndex = 0; freqIndex < bufferLen; freqIndex++) {
     // Loop across stft windows
+    for (std::size_t i = 0; i < previousPhase->size(); i++) {
+      std::cout << (*previousPhase)[i] << " ";
+    }
+    std::cout << "--------------------New inner" << std::endl;
     for (std::size_t windowIndex = 0; windowIndex < windowCount;
          windowIndex++) {
 
@@ -72,8 +75,11 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
       double phase = std::arg(stft[windowIndex][freqIndex]);
 
       // Calculate phase difference between current window and previous window
-      double phaseDiff = phase - previousPhase[freqIndex];
-      previousPhase[freqIndex] = phase;
+      //std::cout << std::endl;
+      //std::cout << previousPhase[freqIndex] << std::endl;
+      double phaseDiff = phase - (*previousPhase)[freqIndex];
+      (*previousPhase)[freqIndex] = 0.5;
+      std::cout << (*previousPhase)[freqIndex] << std::endl;
 
       // Calculate the expected phase difference based on the overlap between
       // windows
@@ -179,12 +185,9 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
  * Maps an angle in radians to the interval [-pi, pi]
  */
 double constrainAngle(double angle) {
-  angle = fmod(angle, 2 * M_PI);
-  if (angle > M_PI) {
-    angle -= 2 * M_PI;
-  }
-  if (angle < - M_PI) {
+  angle = fmod(angle + M_PI, 2 * M_PI);
+  if (angle < 0) {
     angle += 2 * M_PI;
   }
-  return angle;
+  return angle - M_PI;
 }
