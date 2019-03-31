@@ -16,7 +16,7 @@
 #include <complex>
 #include <iostream>
 
-constexpr std::size_t bufferLen = 4096;
+constexpr std::size_t bufferLen = 1024;
 
 int main(int argc, char *argv[]) {
   // Parse command line args

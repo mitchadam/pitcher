@@ -45,17 +45,20 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels,
   //bufferVector *= window;
 
   // SFTF the buffer
-  std::size_t windowSize = 2048;
-  std::size_t overlapFactor = 8;
+  std::size_t windowSize = 256;
+  std::size_t overlapFactor = 16;
   std::vector<CVector> stft = SFTF(bufferVector, windowSize, overlapFactor);
 
   processSTFT(stft, windowSize, overlapFactor, 2);
 
   // Apply low pass filter to reduce noise
-  //CVector lpf = lowPassTransferFunction(100, bufferLen, 44100);
-  //for (auto &freqSignal : stft) {
-  //  freqSignal *= lpf;
-  //}
+  CVector lpf = lowPassTransferFunction(100, bufferLen, 44100);
+  for (auto &freqSignal : stft) {
+    // gain to make up for filter
+    double gain = 2;
+    freqSignal *= lpf;
+    freqSignal *= gain;
+  }
 
   // Inverse STFT
   bufferVector = ISFTF(stft, windowSize, overlapFactor);
