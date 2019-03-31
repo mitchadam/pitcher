@@ -11,12 +11,12 @@
 #include "reader.h"
 #include "writer.h"
 #include "processbuffer.h"
-#include "targetfreq.h" // Key type
+#include "targetfreq.h"
 #include <valarray>
 #include <complex>
 #include <iostream>
 
-constexpr std::size_t bufferLen = 4096;
+constexpr std::size_t bufferLen = 1024;
 
 int main(int argc, char *argv[]) {
   // Parse command line args
@@ -31,12 +31,12 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  // Map command line arg to a Key enum type
-  if (stringToKey.find(keyString) == stringToKey.end()) {
+  // Map command line arg to a musical key represented by an integer
+  if (stringToNote.find(keyString) == stringToNote.end()) {
     std::cout << "Error: unrecognized key." << std::endl;
     return 1;
   }
-  Key key = stringToKey.at(keyString);
+  int key = stringToNote.at(keyString);
 
   // Allocate buffer to read sound file into
   double *buffer = new double[bufferLen];

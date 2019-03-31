@@ -32,24 +32,6 @@ constexpr int note_bb = 10;
 constexpr int note_b = 11;
 
 /**
- * All possible major keys
- */
-enum Key {
-  C,
-  Db,
-  D,
-  Eb,
-  E,
-  F,
-  Gb,
-  G,
-  Ab,
-  A,
-  Bb,
-  B,
-};
-
-/**
  * Mappings from each key to which semitones relative to C are acceptable
  */
 static const std::unordered_map<int, std::unordered_set<int>> keyToSemitones{
@@ -68,27 +50,27 @@ static const std::unordered_map<int, std::unordered_set<int>> keyToSemitones{
 };
 
 /**
- * Maps string to a Key enum type.
+ * Maps string to a note as an int (see constants above)
  * Used to parse command line args.
  */
-static const std::unordered_map<std::string, Key> stringToKey {
-  {"c", C,},
-  {"db", Db},
-  {"d", D},
-  {"eb", Eb},
-  {"e", E},
-  {"f", F},
-  {"gb", Gb},
-  {"g", G},
-  {"ab", Ab},
-  {"a", A},
-  {"bb", Bb},
-  {"b", B},
+static const std::unordered_map<std::string, int> stringToNote {
+  {"c", note_c,},
+  {"db", note_db},
+  {"d", note_d},
+  {"eb", note_eb},
+  {"e", note_e},
+  {"f", note_f},
+  {"gb", note_gb},
+  {"g", note_g},
+  {"ab", note_ab},
+  {"a", note_a},
+  {"bb", note_bb},
+  {"b", note_b},
 };
 
 /**
  * Calculates nearest frequency that corresponds to a note in the key
  */
-double getTargetFreq(double actualFreq, Key key);
+double getTargetFreq(double actualFreq, int key);
 
 #endif

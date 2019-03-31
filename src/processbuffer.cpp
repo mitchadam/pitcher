@@ -9,11 +9,12 @@
 #include "processbuffer.h"
 
 #include "processstft.h"
+#include "filter.h"
 
 #include <iostream> // TODO remove
 
 void processBuffer(double *buffer, std::size_t bufferLen, int channels,
-                   Key key) {
+                   int key) {
   int k, chan;
 
   // Construct a valarray of complex numbers from the input buffer
@@ -40,18 +41,32 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels,
   std::cout << std::endl;
 
   // Taper the edges of the buffer
-  CVector window = createWindow(bufferLen, bufferLen / 2, bufferLen);
-  bufferVector *= window;
+  //CVector window = createWindow(bufferLen, bufferLen / 2, bufferLen);
+  //bufferVector *= window;
 
   // SFTF the buffer
-  std::size_t windowSize = 2048;
-  std::size_t overlapFactor = 8;
+  std::size_t windowSize = 256;
+  std::size_t overlapFactor = 16;
   std::vector<CVector> stft = SFTF(bufferVector, windowSize, overlapFactor);
 
   processSTFT(stft, windowSize, overlapFactor, 2);
+<<<<<<< HEAD
+=======
+
+  // Apply low pass filter to reduce noise
+  CVector lpf = lowPassTransferFunction(100, bufferLen, 44100);
+  for (auto &freqSignal : stft) {
+    // gain to make up for filter
+    double gain = 2;
+    freqSignal *= lpf;
+    freqSignal *= gain;
+  }
+>>>>>>> 449117dc543db639e6d8a7edaadde8d750a8df77
 
   // Inverse STFT
   bufferVector = ISFTF(stft, windowSize, overlapFactor);
+
+  // Low pass filter for noise reduction
 
   // compensates for increase in amplitude do to overlapping windows
   double gain = 0.25;
