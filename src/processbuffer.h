@@ -12,6 +12,7 @@
 #include "fourier.h"
 #include "fundamental.h"
 #include "targetfreq.h"
+#include <string>
 
 /**
  * Does all signal processing on buffer.
@@ -22,6 +23,6 @@
  * @param key The musical key of the piece
  */
 void processBuffer(double *buffer, std::size_t bufferLen, int channels,
-                   int key);
+                    std::string mode, std::string option);
 
 #endif

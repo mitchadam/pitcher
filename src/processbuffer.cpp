@@ -7,18 +7,19 @@
 // -------------------------------------------------
 
 #include "processbuffer.h"
-
 #include "processstft.h"
 #include "filter.h"
+#include "targetfreq.h"
 
 #include <iostream> // TODO remove
 
 void processBuffer(double *buffer, std::size_t bufferLen, int channels,
-                   int key) {
+                  std::string mode, std::string option) {
   int k, chan;
 
   // Construct a valarray of complex numbers from the input buffer
   CVector bufferVector;
+  int sampleRate = 44100;
   bufferVector.resize(bufferLen);
 
   for (chan = 0; chan < channels; chan++) {
@@ -28,46 +29,49 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels,
     }
   }
 
-  // Calculate the fundamental frequency
-  double fund = fundamental(bufferVector, 44100);
-
-  // Calculate the target freqency and scale factor
-  double target = getTargetFreq(fund, key);
-  double pitchScaleFactor = target / fund;
-
-  std::cout << "fund: " << fund << std::endl;
-  std::cout << "target: " << target << std::endl;
-  std::cout << "scale: " << pitchScaleFactor << std::endl;
-  std::cout << std::endl;
-
-  // Taper the edges of the buffer
-  //CVector window = createWindow(bufferLen, bufferLen / 2, bufferLen);
-  //bufferVector *= window;
-
   // SFTF the buffer
   std::size_t windowSize = 256;
   std::size_t overlapFactor = 16;
   std::vector<CVector> stft = SFTF(bufferVector, windowSize, overlapFactor);
 
-  processSTFT(stft, windowSize, overlapFactor, 2);
-<<<<<<< HEAD
-=======
+if( mode == "tune"){
+    // std::cout << "Tuning..." << std::endl;
 
-  // Apply low pass filter to reduce noise
-  CVector lpf = lowPassTransferFunction(100, bufferLen, 44100);
-  for (auto &freqSignal : stft) {
-    // gain to make up for filter
-    double gain = 2;
-    freqSignal *= lpf;
-    freqSignal *= gain;
-  }
->>>>>>> 449117dc543db639e6d8a7edaadde8d750a8df77
+    int key = stringToNote.at(option);
 
+    // Calculate the fundamental frequency
+    double fund = fundamental(bufferVector, sampleRate);
+    // Calculate the target freqency and scale factor
+    double target = getTargetFreq(fund, key);
+    double pitchScaleFactor = target / fund;
+
+    processSTFT(stft, windowSize, overlapFactor, pitchScaleFactor);
+
+} else if (mode == "scale"){
+    // std::cout << "Scaling..." << std::endl;
+
+    int scale = std::stoi(option);
+    processSTFT(stft, windowSize, overlapFactor, scale);
+
+} else if (mode == "lpf"){
+    // std::cout << "Low Pass Filter..." << std::endl;
+
+    int cutoff = std::stoi(option);
+    // Apply low pass filter to reduce noise
+    CVector lpf = lowPassTransferFunction(cutoff, bufferLen, sampleRate);
+    for (auto &freqSignal : stft) {
+      // gain to make up for filter
+      double gain = 2;
+      freqSignal *= lpf;
+      freqSignal *= gain;
+    }
+
+}else if (mode == "hpf"){
+    // std::cout << "High Pass Filter..." << std::endl;
+    int cutoff = std::stoi(option);
+}
   // Inverse STFT
   bufferVector = ISFTF(stft, windowSize, overlapFactor);
-
-  // Low pass filter for noise reduction
-
   // compensates for increase in amplitude do to overlapping windows
   double gain = 0.25;
   // Covert CVector back into array of doubles
@@ -77,6 +81,15 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels,
       buffer[k] = bufferVector[k].real() * gain;
     }
   }
-
   return;
 }
+
+  //TODO REMOVE
+  // std::cout << "fund: " << fund << std::endl;
+  // std::cout << "target: " << target << std::endl;
+  // std::cout << "scale: " << pitchScaleFactor << std::endl;
+  // std::cout << std::endl;
+
+  // Taper the edges of the buffer
+  //CVector window = createWindow(bufferLen, bufferLen / 2, bufferLen);
+  //bufferVector *= window;

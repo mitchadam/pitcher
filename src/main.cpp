@@ -11,7 +11,6 @@
 #include "reader.h"
 #include "writer.h"
 #include "processbuffer.h"
-#include "targetfreq.h"
 #include <valarray>
 #include <complex>
 #include <iostream>
@@ -20,23 +19,18 @@ constexpr std::size_t bufferLen = 1024;
 
 int main(int argc, char *argv[]) {
   // Parse command line args
+  std::string mode;
+  std::string optionSelect;
   std::string inputFileName;
-  std::string keyString;
-  if (argc == 3) {
-    inputFileName = argv[1];
-    keyString = argv[2];
+  if (argc == 4) {
+    mode = argv[1];
+    optionSelect = argv[2];
+    inputFileName = argv[3];
   }
   else {
-    std::cout << "Usage: pitcher [filename] [key]" << std::endl;
+    std::cout << "Usage: pitcher [mode] [options] [file]" << std::endl;
     return 1;
   }
-
-  // Map command line arg to a musical key represented by an integer
-  if (stringToNote.find(keyString) == stringToNote.end()) {
-    std::cout << "Error: unrecognized key." << std::endl;
-    return 1;
-  }
-  int key = stringToNote.at(keyString);
 
   // Allocate buffer to read sound file into
   double *buffer = new double[bufferLen];
@@ -52,61 +46,10 @@ int main(int argc, char *argv[]) {
   int readCount;
   int writeCount;
   while ((readCount = reader.read())) {
-    processBuffer(buffer, bufferLen, reader.getsfinfo().channels, key);
+    processBuffer(buffer, bufferLen, reader.getsfinfo().channels, mode, optionSelect);
     writeCount = writer.write(readCount);
   }
 
   reader.close();
   writer.close();
-
-  /*
-  CVector varr = {{0, 0}, {0, 0}, {0, 0},  {0, 0}, {0, 0}, {0, 0},
-                  {0, 0}, {0, 0}, {0, 0},  {0, 0}, {0, 0}, {0, 0},
-                  {0, 0}, {0, 0}, {75, 0}, {75, 0}};
-  std::cout << "Inital: " << std::endl;
-
-  for (int i = 0; i < varr.size(); i++) {
-    std::cout << varr[i] << " ";
-  }
-  std::cout << std::endl;
-  FFT(varr);
-  std::cout << "FFT: " << std::endl;
-
-  for (int i = 0; i < varr.size(); i++) {
-    std::cout << varr[i] << " ";
-  }
-  std::cout << std::endl;
-  applyIFFT(varr);
-  std::cout << "IFFT: " << std::endl;
-  for (int i = 0; i < varr.size(); i++) {
-    std::cout << varr[i] << " ";
-  }
-  std::cout << std::endl;
-  CVector tester;
-  CVector Sum;
-  int size = 32768;
-  Sum.resize(size,0);
-  int sampleSize = 2048;
-  int overlap = 4;
-  tester.resize(size,100);
-  std::vector<CVector> test = SFTF(tester, sampleSize, overlap);
-
-  // for (size_t i = 0; i < test[0].size(); i++) {
-  //     //Loop through the windows
-  //     for (size_t j = 0; j < test.size(); j++) {
-  //         // Set weach ouput bin as sum of corresponding window bins
-  //         Sum[i] += test[j][i];
-  //     }
-  // }
-  // for(int i =0; i <size; i++){
-  //     std::cout << Sum[i] << " ";
-  // }
-  // std::cout << std::endl;
-  // std::cout << std::endl;
-  // CVector output = ISFTF(test, sampleSize, overlap);
-  // for(int i = 0; i < size; i ++){
-  //     std::cout << output[i] << " ";
-  // }
-  // std::cout << std::endl;
-  */
 }
