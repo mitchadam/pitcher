@@ -19,9 +19,30 @@
 class Reader {
 public:
   Reader(std::string filename, double* buffer, std::size_t bufferLen);
+
+  /**
+   * Opens the file.
+   * Returns true on success.
+   */
   bool open();
+
+  /**
+   * Reads the next chunk of data from the file into the buffer
+   * Returns number of items read into buffer. If this is zero, you have reached
+   * the end of the file.
+   */
   int read();
+
+  /**
+   * Closes the file
+   */
   void close();
+
+  /**
+   * Get SF_INFO struct that is generated on opening the file.
+   * libsndfile uses this struct to keep track of number of channels and other
+   * parameters
+   */
   SF_INFO& getsfinfo(); 
 
 private:

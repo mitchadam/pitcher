@@ -16,6 +16,10 @@
 #include "fourier.h"
 
 /**
+ * This file contains utilities to work with musical notes
+ */
+
+/**
  * Notes expressed as semitones above C
  */
 constexpr int note_c = 0;
@@ -70,6 +74,9 @@ static const std::unordered_map<std::string, int> stringToNote {
 
 /**
  * Calculates nearest frequency that corresponds to a note in the key
+ * @param actualFreq The frequency of the signal (can be estimated using
+ *     fundamental())
+ * @param key The desired key in which to search for the closest acceptable note
  */
 double getTargetFreq(double actualFreq, int key);
 

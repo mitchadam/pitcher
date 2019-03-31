@@ -20,7 +20,9 @@
  * @param buffer Pointer to the start of the buffer
  * @param bufferLen Length of the buffer
  * @param channels Number of audio channels in buffer
- * @param key The musical key of the piece
+ * @param mode The operating mode ("lpf", "scale", etc.)
+ * @param option The option within the mode (e.g. the scaling factor if the
+ *     mode is "scale")
  */
 void processBuffer(double *buffer, std::size_t bufferLen, int channels,
                     std::string mode, std::string option);

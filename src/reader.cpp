@@ -34,11 +34,6 @@ SF_INFO &Reader::getsfinfo() {
   return sfinfo;
 }
 
-/**
- * Reads the next chunk of data from the file into the buffer
- * Returns number of items read into buffer. If this is zero, you have reached
- * the end of the file.
- */
 int Reader::read() {
   return sf_read_double(file, buffer, bufferLen);
 }

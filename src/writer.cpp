@@ -10,9 +10,6 @@
 
 #include "writer.h"
 
-/**
- * Note: pass the sfinfo struct from the input file
- */
 Writer::Writer(std::string filename, double *buffer, std::size_t bufferLen,
                SF_INFO &sfinfo) : sfinfo(sfinfo) {
   this->filename = filename;
@@ -31,11 +28,6 @@ bool Writer::open() {
   return true;
 }
 
-/**
- * Writes data from buffer into file.
- * @param writeCount The number of samples to write
- * Returns number of items written
- */
 int Writer::write(std::size_t writeCount) {
   return sf_write_double(file, buffer, writeCount);
 }

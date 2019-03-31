@@ -18,10 +18,31 @@
 
 class Writer {
 public:
+
+  /**
+   * Constructor
+   * Note: pass the SF_INFO struct from the input file using the getsfinfo()
+   *     method
+   */
   Writer(std::string filename, double *buffer, std::size_t bufferLen,
          SF_INFO &sfinfo);
+
+  /**
+   * Opens the file for writing
+   * Returns true on success
+   */
   bool open();
+
+  /**
+   * Writes data from buffer into file.
+   * @param writeCount The number of samples to write
+   * Returns number of items written
+   */
   int write(std::size_t writeCount);
+
+  /**
+   * Closes the file
+   */
   void close();
 
 private:
