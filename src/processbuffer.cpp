@@ -40,8 +40,8 @@ void processBuffer(double *buffer, std::size_t bufferLen, int channels,
   std::cout << std::endl;
 
   // Taper the edges of the buffer
-  CVector window = createWindow(bufferLen, bufferLen / 2, bufferLen);
-  bufferVector *= window;
+  //CVector window = createWindow(bufferLen, bufferLen / 2, bufferLen);
+  //bufferVector *= window;
 
   // SFTF the buffer
   std::size_t windowSize = 2048;
