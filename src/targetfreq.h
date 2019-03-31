@@ -52,19 +52,19 @@ enum Key {
 /**
  * Mappings from each key to which semitones relative to C are acceptable
  */
-static const std::unordered_map<Key, std::unordered_set<int>> keyToSemitones{
-    {C, {note_c, note_d, note_e, note_f, note_g, note_a, note_b}},
-    {Db, {note_db, note_eb, note_f, note_gb, note_ab, note_bb, note_c}},
-    {D, {note_d, note_e, note_gb, note_g, note_a, note_b, note_db}},
-    {Eb, {note_eb, note_f, note_g, note_ab, note_bb, note_c, note_d}},
-    {E, {note_e, note_gb, note_ab, note_a, note_b, note_db, note_eb}},
-    {F, {note_f, note_g, note_a, note_bb, note_c, note_d, note_e}},
-    {Gb, {note_gb, note_ab, note_bb, note_b, note_db, note_eb, note_f}},
-    {G, {note_g, note_a, note_b, note_c, note_d, note_e, note_gb}},
-    {Ab, {note_ab, note_bb, note_c, note_db, note_eb, note_f, note_g}},
-    {A, {note_a, note_b, note_db, note_d, note_e, note_gb, note_ab}},
-    {Bb, {note_bb, note_c, note_d, note_eb, note_f, note_g, note_a}},
-    {B, {note_b, note_db, note_eb, note_e, note_gb, note_ab, note_bb}},
+static const std::unordered_map<int, std::unordered_set<int>> keyToSemitones{
+    {note_c, {note_c, note_d, note_e, note_f, note_g, note_a, note_b}},
+    {note_db, {note_db, note_eb, note_f, note_gb, note_ab, note_bb, note_c}},
+    {note_d, {note_d, note_e, note_gb, note_g, note_a, note_b, note_db}},
+    {note_eb, {note_eb, note_f, note_g, note_ab, note_bb, note_c, note_d}},
+    {note_e, {note_e, note_gb, note_ab, note_a, note_b, note_db, note_eb}},
+    {note_f, {note_f, note_g, note_a, note_bb, note_c, note_d, note_e}},
+    {note_gb, {note_gb, note_ab, note_bb, note_b, note_db, note_eb, note_f}},
+    {note_g, {note_g, note_a, note_b, note_c, note_d, note_e, note_gb}},
+    {note_ab, {note_ab, note_bb, note_c, note_db, note_eb, note_f, note_g}},
+    {note_a, {note_a, note_b, note_db, note_d, note_e, note_gb, note_ab}},
+    {note_bb, {note_bb, note_c, note_d, note_eb, note_f, note_g, note_a}},
+    {note_b, {note_b, note_db, note_eb, note_e, note_gb, note_ab, note_bb}},
 };
 
 /**
