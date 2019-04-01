@@ -5,35 +5,153 @@ CMPUT 275, Winter 2018
 
 Final Project
 -------------------------------------------------
-An autotune implementation in C++ using a phase vocoder.
-
+An audio processor using a phase vocoder.
 Overview:
-    For our final project we created a phase vocoder which acts like autotune..
+    We created a phase vocoder to be used for audio processing. The way this works
+    is as follows
+
+    1. We fist read in an auido file in the .wav form
+    2. We then use the short-time fourier transform to transform the signals into
+    the frequencey domain. The short time fourier transform works by using the Hann
+    window function over a signal to make many windows. We then use the fast fourier
+    transfrom on each window.
+    3. Once we have each window in the frequencey domain we then utilize the fact that
+    we have the fourier transform of many windows. We do this by comparing the phase
+    of each bin (a specific frequency band) between multiple windows. This then allows us
+    the more accurately determine the freqency of each component by using the phase difference
+    to correct the frequency. This is the benefit of a pahse vocoder.
+    4. Once we have accurate frequencey and magnitude of the signal we can do
+    then audio processing. We have four methods of audio processing
+        a. High pass filter: This dampens all low freqencey components making the signal sound
+            "brighter"
+        b. Low pass filter: This dampens all high freqencey components making the
+            signal sound more mellow.
+        c. Pitch shifting: With this option you are able to scale the signal up or down.
+            Scaling up makes it sound more like a chipmunk while scaling down makes it much
+            deeper. This is nontrival becuase we are able to shift the pitch without
+            changing the duration of the signal by resampling the signal.We are able to do this
+            as a result of using a phase vocoder
+        d. Autotune: In this method we are able to use more algorithms such as auto correctelation
+            to detect the fundamental frequcney of the signal. This allows us to calcualte the ratio
+            between the fundamental freqency and the closest note in the scale. The closest note in
+            the scale is determined algorithmically using modular arithmetic. Once we have this ratio
+            we are able to once again scale the signal by resampling similar to a pitch shifting.
+
+Algorithms and data structres:
+
+    Algorithms
+    1. Fast Fourier Transfrom
+        Runtime O(nlog(n))
+        where n is number of samples in original signal
+
+    2. Short-time Fourier Transfrom
+        Runtime O(n^2log(n))
+        where n is number of samples in original signal
+
+
+    3. Autocorrelation
+        Runtime O(nlogn)
+        where n the number of samples in the original signal
+        This is due to the use of the FFT
+        Autocorrelation is used in fundamental()
+
+    4. Musical note detection by modular arithmetic
+        Runtime O(1)
+        This is due to the use of modular arithmetic which allows us to work in a single octave
+        and use a set to decide if a given note is in the key.
+        This algorithm is used in getTargetFreq()
+
+    Data Structures
+    Sets and Maps both used extensiveley. Also used STL complex numbers and valarray
+
 
 Included files:
     * README
     * Makefile
-    * fft.cpp
-    * fft.h
+    * src/fft.cpp
+    * src/filter.cpp
+    * src/fourier.h
+    * src/fundamental.cpp
+    * src/fundamental.h
+    * src/ifft.cpp
+    * src/istft.cpp
+    * src/main.cpp
+    * src/processbuffer.cpp
+    * src/processbuffer.h
+    * src/processstft.cpp
+    * src/processstft.h
+    * src/reader.cpp
+    * src/reader.h
+    * src/sfprocess.cpp
+    * src/sftf.cpp
+    * src/targetfreq.cpp
+    * src/targetfreq.h
+    * src/writer.cpp
+    * src/writer.h
+    * ADD SOUND FILES
 
 Running instructions:
-    0.
+    0. First install libsndfile in order to read and write .wav files. Use the
+        following commands
+        sudo apt-get install libsndfile1
+        sudo apt-get install libsndfile1-dev
+    1. Then in the main directory run 'make'
+    2. The program is then run using the following formate
+        ./pitcher [mode] [options] [filename]
+        ex command: ./pitcher scale 2.0 hallelujah.wav
 
-Usage instructions:
-    * Install libsndfile if it isn't installed already by running:
-      sudo apt-get install libsndfile1
-      sudo apt-get install libsndfile1-dev
+        a. Mode:
+            Mode determines what audio processing is done on the file it can be
+            scale , tune, hpf, lpf
+            scale - pitch shift the audio file
+            tune - autotune the file with autocorrelation
+            hpf - use a high pass filter
+            lpf - use a low pass filter
 
-Assumptions:
-    *
+        b. Options:
+            Options determines how the mode is used. Each mode has a corresponding option
+            [scale option]: Is the scale factor as a double
+            [tune option]: Is the key the original file is in. Valid keys are: c, d, db, eb, e, f
+                            gb, g, ab, a, bb, b
+            [hpf option]: The cutoff frequency in Hz
+            [lpf option]: The cutoff frequency in Hz
+        c. filename:
+            This is the name of the input file. Must be a .wav file
+    3. The program will then run the process. Since there is a lot of processing
+        to do it may take a while.
+    4. The output will then be saved in the same directory as output.wav
+
+
+Recommended Commands:
+    1. To test high pass filter use:
+        ./pitcher hpf 10000 hallelujah.wav
+    2. To test low pass filter use:
+        ./pitcher lpf 100 hallelujah.wav
+    3. To test scaling use:
+        ./pitcher scale 2 hallelujah.wav
+    4. To test tune use:
+        ./pitcher tune c hallelujah.wav
+
+Notes and Assumptions:
+    * Since we do a manupulation on the signal in the frequency domain there is
+        some noise created. This is heard most in the tune option. While the can
+        make the output sound poor, the desired effect is still heard. Audio processing
+        is a tedious task and fine tuning the output can be very difficult.
+        The tune option is used as demonstration of the possible applications of a phase
+        vocoder and is in no way a trivial task.
+    * Since we have the signal inforamtion in the frequecney domain there are many other
+        signal processing possibilites that could be done.
 
 
 References:
     * Used following websites to learn and implement Cooley-Tukey FFT algorithm:
         https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm
         http://www.drdobbs.com/cpp/a-simple-and-efficient-fft-implementatio/199500857
+        https://rosettacode.org/wiki/Fast_Fourier_transform
     * Using the fft to implement stft and a phase vocoder
-	http://blogs.zynaptiq.com/bernsee/pitch-shifting-using-the-ft/
+        http://blogs.zynaptiq.com/bernsee/pitch-shifting-using-the-ft/
     * Converting frequency to a musical note
-	https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
+        https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
+    * Phase vocoder
+        http://sethares.engr.wisc.edu/vocoders/matlabphasevocoder.html
 
