@@ -73,12 +73,10 @@ int main(int argc, char *argv[]) {
     std::memset(outputBufferLastThird, 0,
                 (inputBufferLen / 2) * sizeof(double));
     int pos = reader.seek(0);
-    std::cout << pos << " ";
     if (!(reader.atEnd())) {
       // Move the file pointer backwards so that we can read overlapping
       // sections
       pos = reader.seek(-1 * (((int)inputBufferLen) / 2));
-      std::cout << pos << std::endl;
     }
   }
 
