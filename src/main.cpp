@@ -53,16 +53,33 @@ int main(int argc, char *argv[]) {
 
   int readCount;
   int writeCount;
+  // Since we are processing overlapping sections, we can only write every other
+  // iteration of the loop
+  bool write = false;
   while ((readCount = reader.read())) {
     processBuffer(inputBuffer, inputBufferLen, outputBuffer, outputBufferLen,
                   reader.getsfinfo().channels, mode, optionSelect);
-    writeCount = writer.write(readCount);
+    if (write) {
+      // TODO deal with end edge case
+      writeCount = writer.write(inputBufferLen);
+      write = false;
+    } else {
+      write = true;
+    }
     // Shift output buffer
     std::memmove(outputBuffer, outputBufferThird,
                  inputBufferLen * sizeof(double));
     // Set last third of output buffer to zeros
     std::memset(outputBufferLastThird, 0,
                 (inputBufferLen / 2) * sizeof(double));
+    int pos = reader.seek(0);
+    std::cout << pos << " ";
+    if (!(reader.atEnd())) {
+      // Move the file pointer backwards so that we can read overlapping
+      // sections
+      pos = reader.seek(-1 * (((int)inputBufferLen) / 2));
+      std::cout << pos << std::endl;
+    }
   }
 
   reader.close();
