@@ -13,19 +13,20 @@
 
 #include <iostream> // TODO remove
 
-void processBuffer(double *buffer, std::size_t bufferLen, int channels,
-                  std::string mode, std::string option) {
+void processBuffer(double *inputBuffer, std::size_t inputBufferLen,
+                   double *outputBuffer, std::size_t outputBufferLen,
+                   int channels, std::string mode, std::string option) {
   int k, chan;
 
   // Construct a valarray of complex numbers from the input buffer
   CVector bufferVector;
   int sampleRate = 44100;
-  bufferVector.resize(bufferLen);
+  bufferVector.resize(inputBufferLen);
 
   for (chan = 0; chan < channels; chan++) {
-    for (k = chan; k < bufferLen; k += channels) {
+    for (k = chan; k < inputBufferLen; k += channels) {
       // Convert each value in the buffer into a complex number
-      bufferVector[k] = CNum(buffer[k], 0);
+      bufferVector[k] = CNum(inputBuffer[k], 0);
     }
   }
 
@@ -58,7 +59,7 @@ if( mode == "tune"){
 
     double cutoff = std::stod(option);
     // Apply low pass filter to reduce noise
-    CVector lpf = lowPassTransferFunction(cutoff, bufferLen, sampleRate);
+    CVector lpf = lowPassTransferFunction(cutoff, inputBufferLen, sampleRate);
     for (auto &freqSignal : stft) {
       freqSignal *= lpf;
     }
@@ -67,7 +68,7 @@ if( mode == "tune"){
     // std::cout << "High Pass Filter..." << std::endl;
     double cutoff = std::stod(option);
     // Apply high pass filter to reduce noise
-    CVector hpf = highPassTransferFunction(cutoff, bufferLen, sampleRate);
+    CVector hpf = highPassTransferFunction(cutoff, inputBufferLen, sampleRate);
     for (auto &freqSignal : stft) {
       freqSignal *= hpf;
     }
@@ -75,13 +76,22 @@ if( mode == "tune"){
 
   // Inverse STFT
   bufferVector = ISFTF(stft, windowSize, overlapFactor);
+
+  // Window the entire processed buffer so that it can be crossfaded
+  CVector crossfadeWindow = createWindow(inputBufferLen, inputBufferLen / 2,
+                                         inputBufferLen);
+  bufferVector *= crossfadeWindow;
+  
   // Compensates for increase in amplitude do to overlapping windows
   double gain = 0.25;
   // Covert CVector back into array of doubles
   for (chan = 0; chan < channels; chan++) {
-    for (k = chan; k < bufferLen; k += channels) {
+    for (k = chan; k < inputBufferLen; k += channels) {
       // Convert each value in the buffer into a complex number
-      buffer[k] = bufferVector[k].real() * gain;
+      // Add to the last 2/3 of the output buffer
+      if (k + inputBufferLen / 2 < outputBufferLen) {
+        outputBuffer[k + inputBufferLen / 2] += bufferVector[k].real() * gain;
+      }
     }
   }
   return;

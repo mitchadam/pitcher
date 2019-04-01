@@ -38,6 +38,18 @@ int Reader::read() {
   return sf_read_double(file, buffer, bufferLen);
 }
 
+int Reader::seek(int offset) {
+  return sf_seek(file, offset, SEEK_CUR);
+}
+
+bool Reader::atEnd() {
+  int currentPosition = sf_seek(file, 0, SEEK_CUR);
+  int endPosition = sf_seek(file, 0, SEEK_END);
+  // Go back to currentPosition
+  sf_seek(file, currentPosition, SEEK_SET);
+  return currentPosition == endPosition;
+}
+
 void Reader::close() {
   sf_close(file);
 }

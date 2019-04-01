@@ -34,6 +34,17 @@ public:
   int read();
 
   /**
+   * Moves the file pointer by offset. Offset can be negative.
+   * Returns offset from the start of the file or -1 on failure.
+   */
+  int seek(int offset);
+
+  /**
+   * Returns true if the file pointer is at the end of the file.
+   */
+  bool atEnd();
+
+  /**
    * Closes the file
    */
   void close();
