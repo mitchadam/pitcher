@@ -6,16 +6,16 @@
 // Final Project
 // -------------------------------------------------
 
-#include <iostream>
-
 #include "reader.h"
 #include "writer.h"
 #include "processbuffer.h"
 #include <valarray>
 #include <complex>
+#include <cstring>
 #include <iostream>
 
-constexpr std::size_t bufferLen = 1024;
+constexpr std::size_t inputBufferLen = 1024;
+constexpr std::size_t outputBufferLen = 1536; // 1.5x inputBufferLen
 
 int main(int argc, char *argv[]) {
   // Parse command line args
@@ -33,21 +33,36 @@ int main(int argc, char *argv[]) {
   }
 
   // Allocate buffer to read sound file into
-  double *buffer = new double[bufferLen];
-  Reader reader(inputFileName, buffer, bufferLen);
+  double *inputBuffer = new double[inputBufferLen];
+  std::memset(inputBuffer, 0, inputBufferLen);
+  // Allocate buffer to store and crossfade processed sound
+  double *outputBuffer = new double[outputBufferLen];
+  std::memset(outputBuffer, 0, outputBufferLen);
+  double *outputBufferThird = outputBuffer + inputBufferLen / 2;
+  double *outputBufferLastThird = outputBuffer + inputBufferLen;
+
+  Reader reader(inputFileName, inputBuffer, inputBufferLen);
   if (!reader.open()) {
     std::cout << "Error: Failed to open file." << std::endl;
     return 1;
   }
   // Need to pass the SF_INFO struct from the reader to the writer
-  Writer writer("output.wav", buffer, bufferLen, reader.getsfinfo());
+  // Writer only writes from the first 2/3 of output buffer
+  Writer writer("output.wav", outputBuffer, inputBufferLen, reader.getsfinfo());
   writer.open();
 
   int readCount;
   int writeCount;
   while ((readCount = reader.read())) {
-    processBuffer(buffer, bufferLen, reader.getsfinfo().channels, mode, optionSelect);
+    processBuffer(inputBuffer, inputBufferLen, outputBuffer, outputBufferLen,
+                  reader.getsfinfo().channels, mode, optionSelect);
     writeCount = writer.write(readCount);
+    // Shift output buffer
+    std::memmove(outputBuffer, outputBufferThird,
+                 inputBufferLen * sizeof(double));
+    // Set last third of output buffer to zeros
+    std::memset(outputBufferLastThird, 0,
+                (inputBufferLen / 2) * sizeof(double));
   }
 
   reader.close();
