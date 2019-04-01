@@ -50,13 +50,13 @@ if( mode == "tune"){
 } else if (mode == "scale"){
     // std::cout << "Scaling..." << std::endl;
 
-    int scale = std::stoi(option);
+    double scale = std::stod(option);
     processSTFT(stft, windowSize, overlapFactor, scale);
 
 } else if (mode == "lpf"){
     // std::cout << "Low Pass Filter..." << std::endl;
 
-    int cutoff = std::stoi(option);
+    double cutoff = std::stod(option);
     // Apply low pass filter to reduce noise
     CVector lpf = lowPassTransferFunction(cutoff, bufferLen, sampleRate);
     for (auto &freqSignal : stft) {
@@ -65,7 +65,7 @@ if( mode == "tune"){
 
 }else if (mode == "hpf"){
     // std::cout << "High Pass Filter..." << std::endl;
-    int cutoff = std::stoi(option);
+    double cutoff = std::stod(option);
     // Apply high pass filter to reduce noise
     CVector hpf = highPassTransferFunction(cutoff, bufferLen, sampleRate);
     for (auto &freqSignal : stft) {
