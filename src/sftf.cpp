@@ -20,8 +20,8 @@ std::vector<CVector> SFTF(CVector& signal, int sampleSize, int overlap){
     std::vector<CVector> windowFFTS;
 
     // Create a window every half window size
-    for (int i = -sampleSize/2; i <=(n+sampleSize/2); i += sampleSize/overlap) {
-    //for (int i = 0; i <= n; i += sampleSize/overlap) {
+    //for (int i = -sampleSize/2; i <=(n+sampleSize/2); i += sampleSize/overlap) {
+    for (int i = 0; i <= n; i += sampleSize/overlap) {
         // Uses hann window function to create window, zero
         //everywhere outside of window
         // std::cout << "Creating a new window with center: " << i << std::endl;

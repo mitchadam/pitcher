@@ -15,6 +15,9 @@ CVector ISFTF (std::vector<CVector> windowFFTS, int sampleSize, int overlap){
     for (size_t i = 0; i < windowFFTS.size(); i++) {
         //Inverse FT each window first
         applyIFFT(windowFFTS[i]);
+        // Apply window
+        CVector window = createWindow(n, i * sampleSize / overlap, sampleSize);
+        windowFFTS[i] *= window;
     }
     //Add together all the windows to get the ouput window
     //Loop through the bins
