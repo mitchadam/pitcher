@@ -154,4 +154,8 @@ References:
         https://www.johndcook.com/blog/2016/02/10/musical-pitch-notation/
     * Phase vocoder
         http://sethares.engr.wisc.edu/vocoders/matlabphasevocoder.html
+    * Pitch detection algorithms
+        https://sound.eti.pg.gda.pl/student/eim/synteza/leszczyna/index_ang.htm
+        https://ccrma.stanford.edu/~pdelac/154/m154paper.htm
+        https://en.wikipedia.org/wiki/Cepstrum
 
