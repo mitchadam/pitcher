@@ -37,20 +37,22 @@ constexpr int note_b = 11;
 
 /**
  * Mappings from each key to which semitones relative to C are acceptable
+ * Note: adding the octave (e.g. note_c + 12) makes it easier to calculate the
+ * target frequency in getTargetFreq
  */
 static const std::unordered_map<int, std::unordered_set<int>> keyToSemitones{
-    {note_c, {note_c, note_d, note_e, note_f, note_g, note_a, note_b}},
-    {note_db, {note_db, note_eb, note_f, note_gb, note_ab, note_bb, note_c}},
-    {note_d, {note_d, note_e, note_gb, note_g, note_a, note_b, note_db}},
-    {note_eb, {note_eb, note_f, note_g, note_ab, note_bb, note_c, note_d}},
-    {note_e, {note_e, note_gb, note_ab, note_a, note_b, note_db, note_eb}},
-    {note_f, {note_f, note_g, note_a, note_bb, note_c, note_d, note_e}},
-    {note_gb, {note_gb, note_ab, note_bb, note_b, note_db, note_eb, note_f}},
-    {note_g, {note_g, note_a, note_b, note_c, note_d, note_e, note_gb}},
-    {note_ab, {note_ab, note_bb, note_c, note_db, note_eb, note_f, note_g}},
-    {note_a, {note_a, note_b, note_db, note_d, note_e, note_gb, note_ab}},
-    {note_bb, {note_bb, note_c, note_d, note_eb, note_f, note_g, note_a}},
-    {note_b, {note_b, note_db, note_eb, note_e, note_gb, note_ab, note_bb}},
+  {note_c, {note_c, note_d, note_e, note_f, note_g, note_a, note_b, note_c + 12}},
+  {note_db, {note_db, note_eb, note_f, note_gb, note_ab, note_bb, note_c, note_db + 12}},
+  {note_d, {note_d, note_e, note_gb, note_g, note_a, note_b, note_db, note_d + 12}},
+  {note_eb, {note_eb, note_f, note_g, note_ab, note_bb, note_c, note_d, note_eb + 12}},
+  {note_e, {note_e, note_gb, note_ab, note_a, note_b, note_db, note_eb, note_e + 12}},
+  {note_f, {note_f, note_g, note_a, note_bb, note_c, note_d, note_e, note_f + 12}},
+  {note_gb, {note_gb, note_ab, note_bb, note_b, note_db, note_eb, note_f, note_gb + 12}},
+  {note_g, {note_g, note_a, note_b, note_c, note_d, note_e, note_gb, note_g + 12}},
+  {note_ab, {note_ab, note_bb, note_c, note_db, note_eb, note_f, note_g, note_ab + 12}},
+  {note_a, {note_a, note_b, note_db, note_d, note_e, note_gb, note_ab, note_a + 12}},
+  {note_bb, {note_bb, note_c, note_d, note_eb, note_f, note_g, note_a, note_bb + 12}},
+  {note_b, {note_b, note_db, note_eb, note_e, note_gb, note_ab, note_bb, note_b + 12}},
 };
 
 /**
