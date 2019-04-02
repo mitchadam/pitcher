@@ -11,8 +11,6 @@
 #include "filter.h"
 #include "targetfreq.h"
 
-#include <iostream> // TODO remove
-
 void processBuffer(double *inputBuffer, std::size_t inputBufferLen,
                    double *outputBuffer, std::size_t outputBufferLen,
                    int channels, std::string mode, std::string option) {
@@ -46,9 +44,6 @@ if( mode == "tune"){
     double target = getTargetFreq(fund, key);
     double pitchScaleFactor = target / fund;
 
-    std::cout << fund << " ";
-    std::cout << target << " ";
-    std::cout << pitchScaleFactor << std::endl;
     processSTFT(stft, windowSize, overlapFactor, pitchScaleFactor);
 
 } else if (mode == "scale"){
