@@ -173,6 +173,13 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
       stft[windowIndex][freqIndex].imag(mag * std::sin(phase));
     }
   }
+
+  // Zero negative frequencies
+  for (std::size_t windowIndex = 0; windowIndex < windowCount; windowIndex++) {
+    for (std::size_t i = bufferLen / 2; i < bufferLen; i++) {
+      stft[windowIndex][i] = CNum(0, 0);
+    }
+  }
 }
 
 /**
