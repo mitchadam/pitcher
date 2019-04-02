@@ -11,8 +11,6 @@
 #include "filter.h"
 #include "targetfreq.h"
 
-#include <iostream> // TODO remove
-
 void processBuffer(double *inputBuffer, std::size_t inputBufferLen,
                    double *outputBuffer, std::size_t outputBufferLen,
                    int channels, std::string mode, std::string option) {

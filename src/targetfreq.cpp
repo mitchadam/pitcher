@@ -8,6 +8,8 @@
 
 #include <cmath>
 
+#include <iostream> // TODO remove
+
 #include "targetfreq.h"
 
 double getTargetFreq(double actualFreq, int key) {
@@ -23,7 +25,7 @@ double getTargetFreq(double actualFreq, int key) {
   // Map to one octave
   double semitonesModded = std::fmod(semitonesFromC0, 12);
   // Round to nearest integer semitone
-  double semitonesRounded = std::round(semitonesFromC0);
+  double semitonesRounded = std::round(semitonesModded);
   bool roundedUp = true;
   if (semitonesRounded < semitonesModded) {
     roundedUp = false;
@@ -55,6 +57,12 @@ double getTargetFreq(double actualFreq, int key) {
   }
   targetSemitone %= 12;
 
+  // The closest semitone might be in the octave below or above
+  if (targetSemitone - semitone > 2) {
+    targetSemitone -= 12;
+  } else if (semitone - targetSemitone > 2) {
+    targetSemitone += 12;
+  }
   // Convert from semitone to frequency on Hz
   double target = static_cast<double>(targetSemitone + octave * 12);
   target = C0 * pow(2, target / 12);
