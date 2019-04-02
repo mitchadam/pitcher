@@ -30,7 +30,7 @@ double fundamental(CVector &signal, unsigned long sampleRate) {
     element = element * std::conj(element);
   }
 
-  // Find peak in the autocorrelation
+  // Find peak in the cepstrum
   // Skip the zeroth element
   double max = 0;
   std::size_t maxIndex = 0;
