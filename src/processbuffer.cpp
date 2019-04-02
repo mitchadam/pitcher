@@ -67,6 +67,10 @@ if( mode == "tune"){
     double cutoff = std::stod(option);
     // Apply high pass filter to reduce noise
     CVector hpf = highPassTransferFunction(cutoff, inputBufferLen, sampleRate);
+    // Increase "strength" of hpf
+    for (auto &num : hpf) {
+      num = std::pow(num, 100);
+    }
     for (auto &freqSignal : stft) {
       freqSignal *= hpf;
     }
