@@ -23,12 +23,14 @@ double fundamental(CVector &signal, unsigned long sampleRate) {
   FFT(copy);
   for (auto &element : copy) {
     element = element * std::conj(element);
-    element = CNum(std::log(element.real()), 0);
+    //element = CNum(std::log(element.real()), 0);
   }
   IFFT(copy);
+  /*
   for (auto &element : copy) {
     element = element * std::conj(element);
   }
+  */
 
   // Find peak in the cepstrum
   // Skip the zeroth element
