@@ -6,22 +6,29 @@
 // Final Project
 // -------------------------------------------------
 
+#include <cmath> // log()
+
 #include "fundamental.h"
+
 
 double fundamental(CVector &signal, unsigned long sampleRate) {
   // Ignore this many elements from the edges of the autocorrelation signal
   // Sometimes the autocorrelation signal has weird behaviour at the edges
-  std::size_t edgeIgnore = 10;
+  std::size_t edgeIgnore = 100;
 
   // Create a copy of the signal to perform fft on
   CVector copy = signal;
 
-  // Compute the autocorrelation of the signal via the frequency domain
+  // Compute the cepstrum of the signal via the frequency domain
   FFT(copy);
   for (auto &element : copy) {
     element = element * std::conj(element);
+    element = CNum(std::log(element.real()), 0);
   }
   IFFT(copy);
+  for (auto &element : copy) {
+    element = element * std::conj(element);
+  }
 
   // Find peak in the autocorrelation
   // Skip the zeroth element

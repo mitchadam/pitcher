@@ -46,6 +46,9 @@ if( mode == "tune"){
     double target = getTargetFreq(fund, key);
     double pitchScaleFactor = target / fund;
 
+    std::cout << fund << " ";
+    std::cout << target << " ";
+    std::cout << pitchScaleFactor << std::endl;
     processSTFT(stft, windowSize, overlapFactor, pitchScaleFactor);
 
 } else if (mode == "scale"){
