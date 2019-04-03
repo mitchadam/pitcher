@@ -89,7 +89,8 @@ Included files:
     * src/targetfreq.h
     * src/writer.cpp
     * src/writer.h
-    * Samples
+    * hallelujah.wav
+    * samples/
 
 Running instructions:
     0. First install libsndfile in order to read and write .wav files. Use the
