@@ -34,8 +34,6 @@ void processBuffer(double *inputBuffer, std::size_t inputBufferLen,
   std::vector<CVector> stft = SFTF(bufferVector, windowSize, overlapFactor);
 
 if( mode == "tune"){
-    // std::cout << "Tuning..." << std::endl;
-
     int key = stringToNote.at(option);
 
     // Calculate the fundamental frequency
@@ -47,13 +45,11 @@ if( mode == "tune"){
     processSTFT(stft, windowSize, overlapFactor, pitchScaleFactor);
 
 } else if (mode == "scale"){
-    // std::cout << "Scaling..." << std::endl;
 
     double scale = std::stod(option);
     processSTFT(stft, windowSize, overlapFactor, scale);
 
 } else if (mode == "lpf"){
-    // std::cout << "Low Pass Filter..." << std::endl;
 
     double cutoff = std::stod(option);
     // Apply low pass filter to reduce noise
@@ -63,7 +59,6 @@ if( mode == "tune"){
     }
 
 }else if (mode == "hpf"){
-    // std::cout << "High Pass Filter..." << std::endl;
     double cutoff = std::stod(option);
     // Apply high pass filter to reduce noise
     CVector hpf = highPassTransferFunction(cutoff, inputBufferLen, sampleRate);
@@ -83,7 +78,7 @@ if( mode == "tune"){
   CVector crossfadeWindow = createWindow(inputBufferLen, inputBufferLen / 2,
                                          inputBufferLen);
   bufferVector *= crossfadeWindow;
-  
+
   // Compensates for increase in amplitude do to overlapping windows
   double gain = 0.25;
   // Covert CVector back into array of doubles
@@ -98,13 +93,3 @@ if( mode == "tune"){
   }
   return;
 }
-
-  //TODO REMOVE
-  // std::cout << "fund: " << fund << std::endl;
-  // std::cout << "target: " << target << std::endl;
-  // std::cout << "scale: " << pitchScaleFactor << std::endl;
-  // std::cout << std::endl;
-
-  // Taper the edges of the buffer
-  //CVector window = createWindow(bufferLen, bufferLen / 2, bufferLen);
-  //bufferVector *= window;

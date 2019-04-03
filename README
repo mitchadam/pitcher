@@ -3,9 +3,10 @@ Name: Mitchell Adam, Ryan Shukla
 ID: 1528592, 1537980
 CMPUT 275, Winter 2018
 
-Final Project
+Final Project: Pitcher
 -------------------------------------------------
-An audio processor using a phase vocoder.
+An audio processor using a phase vocoder. See the samples folder for some examples
+of signal manupulation
 Overview:
     We created a phase vocoder to be used for audio processing. The way this works
     is as follows
@@ -88,7 +89,7 @@ Included files:
     * src/targetfreq.h
     * src/writer.cpp
     * src/writer.h
-    * ADD SOUND FILES
+    * Samples
 
 Running instructions:
     0. First install libsndfile in order to read and write .wav files. Use the
@@ -131,6 +132,9 @@ Recommended Commands:
         ./pitcher scale 2 hallelujah.wav
     4. To test tune use:
         ./pitcher tune c hallelujah.wav
+
+    NOTE: In the samples folder we have already run a wide range of process on
+        the files. Here you can see how the program changes the audio
 
 Notes and Assumptions:
     * Since we do a manupulation on the signal in the frequency domain there is

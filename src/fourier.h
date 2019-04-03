@@ -27,30 +27,39 @@ const double PI = 3.141592653589793238460;
     Note: n must be a power of 2
     Parameters: z - an array representing the signal, using the valarray
     library
+    @param: z is the signal to fft
 */
 void FFT(CVector& z);
 
 /*
     Handles the Inverse fourier transform by scaling 1/n
+    and taking conjugate of signal
+    @param: z is the signal to do fft on
 */
 void applyIFFT(CVector& z);
-/*
-    Inverse fft, works by chagning the sign in exponenent of fft
-*/
-void IFFT(CVector& z);
 
 /*
     Implemntation of the short time fourier transform
     Breaks up signal into windows to get more accurate ffts
+    @param: z is signal to perfrom SFTF on
+    @param: sampleSize is lenght of window
+    @param: overlap is the overlap factor (should be multiple of 2)
+
 */
 std::vector<CVector> SFTF(CVector& z, int sampleSize, int overlap);
 /*
     Used by STFT to create the windows of a signal
+    @param: n is the lenght of entire signal
+    @param: center is the index of the center of the window
+    @param: size is the size of each window
 */
 CVector createWindow(int n, int center, int size);
 /*
     Inverse SFTF
     First does the IFFT and then adds the windows back up
+    @param: windowFFTS is the fourier signal
+    @param: sampleSize is the size of the signal
+    @param: overlap is the overlap factor should be same as SFTF
 */
 CVector ISFTF (std::vector<CVector> windowFFTS, int sampleSize, int overlap);
 #endif

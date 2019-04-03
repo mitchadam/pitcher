@@ -20,40 +20,20 @@ std::vector<CVector> SFTF(CVector& signal, int sampleSize, int overlap){
     std::vector<CVector> windowFFTS;
 
     // Create a window every half window size
-    //for (int i = -sampleSize/2; i <=(n+sampleSize/2); i += sampleSize/overlap) {
     for (int i = 0; i <= n; i += sampleSize/overlap) {
         // Uses hann window function to create window, zero
         //everywhere outside of window
-        // std::cout << "Creating a new window with center: " << i << std::endl;
         CVector scalingWindow = createWindow(n, i, sampleSize);
         CVector signalWindow = signal * scalingWindow;
-        // for(int i =0; i < n; i++){
-        //     // if(i >=0 && i <n){
-        //     //     std::cout << scalingWindow[i] << " ";
-        //     // }
-        // }
+
+        //Now that we have the windowed signal, fft signal
         FFT(signalWindow);
-        // DEBUGGING
-        // for(int i =0; i < n; i++){
-        //     std::cout << signalWindow[i] << " ";
-        // }
-        // std::cout << std::endl;
-        // std::cout << std::endl;
-        // applyIFFT(signalWindow);
-        // for(int i =0; i < n; i++){
-        //     std::cout << signalWindow[i] << " ";
-        // }
-        // std::cout << std::endl;
+
         windowFFTS.push_back(signalWindow);
     }
     return windowFFTS;
 }
 
-/*
-    Creates an array to multiple buffer by in order to get the correct sample
-    window
-    Uses the hann Window function
-*/
 CVector createWindow(int n, int center, int size){
     CVector scaling;
     scaling.resize(n,0);

@@ -22,7 +22,6 @@ double constrainAngle(double angle);
 void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
                  std::size_t overlapFactor, double pitchScaleFactor) {
 
-  // TODO don't hard code
   double sampleRate = 44100;
 
   // Length of the buffer in samples (time domain length is same as freq domain
@@ -36,9 +35,7 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
   std::size_t windowCount = stft.size();
 
   // Number of samples between start of a window and the next window
-  // TODO account for edges
   std::size_t windowStride = bufferLen / windowCount;
-
 
   // Ensure actualFreqs and magnitudes vectors have correct size
   // Outer index is window, inner is freqency bin
@@ -93,7 +90,7 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
     }
   }
 
-  // DO PITCH SHIFTING HERE
+  // Now pitch shifting
   // Do resampling to shift pitch
   // Simply move magnitudes to new indeces
   // Move AND scale actual frequencies
@@ -133,11 +130,6 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
       }
     }
   }
-
-  // Update the stft representation based on the new magnitudes and frequencies
-  // - Convert actual frequencies back to array of phases
-  // - Use phase and magnitudes to calculate re and im parts
-
   // Since we calculate a change in phase between windows, we need to keep track
   // of the phase at the previous window
   std::vector<double> phaseAccum;
