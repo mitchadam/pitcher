@@ -33,7 +33,7 @@ void processBuffer(double *inputBuffer, std::size_t inputBufferLen,
   std::size_t overlapFactor = 16;
   std::vector<CVector> stft = SFTF(bufferVector, windowSize, overlapFactor);
 
-if( mode == "tune"){
+  if (mode == "tune") {
     int key = stringToNote.at(option);
 
     // Calculate the fundamental frequency
@@ -44,12 +44,12 @@ if( mode == "tune"){
 
     processSTFT(stft, windowSize, overlapFactor, pitchScaleFactor);
 
-} else if (mode == "scale"){
+  } else if (mode == "scale") {
 
     double scale = std::stod(option);
     processSTFT(stft, windowSize, overlapFactor, scale);
 
-} else if (mode == "lpf"){
+  } else if (mode == "lpf") {
 
     double cutoff = std::stod(option);
     // Apply low pass filter to reduce noise
@@ -58,7 +58,7 @@ if( mode == "tune"){
       freqSignal *= lpf;
     }
 
-}else if (mode == "hpf"){
+  } else if (mode == "hpf") {
     double cutoff = std::stod(option);
     // Apply high pass filter to reduce noise
     CVector hpf = highPassTransferFunction(cutoff, inputBufferLen, sampleRate);
@@ -69,7 +69,7 @@ if( mode == "tune"){
     for (auto &freqSignal : stft) {
       freqSignal *= hpf;
     }
-}
+  }
 
   // Inverse STFT
   bufferVector = ISFTF(stft, windowSize, overlapFactor);

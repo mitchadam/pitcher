@@ -45,7 +45,6 @@ CVector highPassTransferFunction(double cutoff, std::size_t length,
   CVector output;
   output.resize(length, 0);
 
-  CNum temp;
   // Apply transfer function
   for (std::size_t i = 0; i < length; i++) {
     output[i] = CNum(0, ((double)i) * baseBinFreq) /

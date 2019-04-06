@@ -15,8 +15,8 @@
  * Generates low pass filter transfer function (H(w)) for a given cutoff
  * frequency
  * @param cutoff The filter cutoff frequency in Hz
- * @param sampleRate The sample rate of the signal
  * @param length The length of the signal or buffer
+ * @param sampleRate The sample rate of the signal
  */
 CVector lowPassTransferFunction(double cutoff, std::size_t length, int sampleRate);
 
@@ -24,8 +24,8 @@ CVector lowPassTransferFunction(double cutoff, std::size_t length, int sampleRat
  * Generates high pass filter transfer function (H(w)) for a given cutoff
  * frequency
  * @param cutoff The filter cutoff frequency in Hz
- * @param sampleRate The sample rate of the signal
  * @param length The length of the signal or buffer
+ * @param sampleRate The sample rate of the signal
  */
 CVector highPassTransferFunction(double cutoff, std::size_t length, int sampleRate);
 
