@@ -19,15 +19,15 @@ double fundamental(CVector &signal, unsigned long sampleRate) {
   // Create a copy of the signal to perform fft on
   CVector copy = signal;
 
-  // Compute the cepstrum of the signal via the frequency domain
+  // Compute the autocorrelation of the signal via the frequency domain
   FFT(copy);
   for (auto &element : copy) {
     element = element * std::conj(element);
   }
   applyIFFT(copy);
 
-  // Find peak in the cepstrum
-  // Skip the zeroth element
+  // Find peak in the autocorrelation
+  // Ignore the edges (lowest and highest frequencies)
   double max = 0;
   std::size_t maxIndex = 0;
   for (std::size_t i = edgeIgnore; i < copy.size() - edgeIgnore; i++) {

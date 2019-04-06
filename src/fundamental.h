@@ -19,7 +19,7 @@ typedef std::complex<double> CNum;
 typedef std::valarray<CNum> CVector;
 
 /**
- * Estimates the fundamental frequency of a signal using the power cepstrum
+ * Estimates the fundamental frequency of a signal using autocorrelation
  * @param signal The signal to analyze
  * @param sampleRate The sample rate in Hz of the signal
  */

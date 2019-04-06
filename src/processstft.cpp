@@ -13,12 +13,6 @@
 // Forward declaration
 double constrainAngle(double angle);
 
-/**
- * @param windowSize The size of a window in the stft
- * @param overlapFactor Amount of overlap between windows
- *   e.g. If the next window starts 1/4 of the way into the current window,
- *   then overlapFactor = 4
- */
 void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
                  std::size_t overlapFactor, double pitchScaleFactor) {
 
@@ -52,7 +46,6 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
 
   // Store previous previous of each bin as we loop through windows
   std::vector<double> previousPhase;
-  // TODO what to initialize previous to?
   previousPhase.resize(bufferLen, 0);
 
   // Loop across frequency bins
@@ -133,7 +126,6 @@ void processSTFT(std::vector<CVector> &stft, std::size_t windowSize,
   // Since we calculate a change in phase between windows, we need to keep track
   // of the phase at the previous window
   std::vector<double> phaseAccum;
-  // TODO what to initialize this to?
   phaseAccum.resize(bufferLen, 0);
 
   // Loop across frequency bins

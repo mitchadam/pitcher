@@ -8,8 +8,6 @@
 
 #include <cmath>
 
-#include <iostream> // TODO remove
-
 #include "targetfreq.h"
 
 double getTargetFreq(double actualFreq, int key) {
