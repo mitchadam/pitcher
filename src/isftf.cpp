@@ -8,6 +8,8 @@
 #include "fourier.h"
 
 CVector ISFTF (std::vector<CVector> windowFFTS, int sampleSize, int overlap){
+
+    //Create output signal
     CVector outputSignal;
     size_t n = windowFFTS[0].size();
     outputSignal.resize(n,0);
@@ -28,11 +30,5 @@ CVector ISFTF (std::vector<CVector> windowFFTS, int sampleSize, int overlap){
             outputSignal[i] += windowFFTS[j][i];
         }
     }
-
-    // for (size_t i = 0; i <=n; i += sampleSize/overlap) {
-    //     CVector scalingWindow = createWindow(n, i, sampleSize);
-    //     outputSignal = outputSignal * scalingWindow;
-    // }
-
     return outputSignal;
 }

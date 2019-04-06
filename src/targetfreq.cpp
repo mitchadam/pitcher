@@ -34,7 +34,6 @@ double getTargetFreq(double actualFreq, int key) {
   int semitone = static_cast<int>(semitonesRounded);
 
   /// Decide whether semitone of signal is in the key
-
   int targetSemitone;
   // Set of all semitones that are in the key
   std::unordered_set<int> keySet = keyToSemitones.at(key);

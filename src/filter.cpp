@@ -7,7 +7,6 @@
 // -------------------------------------------------
 
 #include "filter.h"
-
 #include <cmath>
 
 CVector lowPassTransferFunction(double cutoff, std::size_t length,
@@ -24,6 +23,7 @@ CVector lowPassTransferFunction(double cutoff, std::size_t length,
   output.resize(length, 0);
 
   CNum temp;
+  // Apply transfer function
   for (std::size_t i = 0; i < length; i++) {
     temp = CNum(1, RC * baseBinFreq * ((double)i));
     output[i] = CNum(1, 0) / temp;
@@ -46,33 +46,11 @@ CVector highPassTransferFunction(double cutoff, std::size_t length,
   output.resize(length, 0);
 
   CNum temp;
+  // Apply transfer function
   for (std::size_t i = 0; i < length; i++) {
-    /*
-    temp = CNum(1, RC * baseBinFreq * ((double)i));
-    output[i] = CNum(0, RC * baseBinFreq * ((double)i)) / temp;
-    */
-
-    /*
-    output[i] = CNum(0, RC * ((double)i) * baseBinFreq) /
-        CNum(1, RC * ((double)i) * baseBinFreq);
-    */
-
     output[i] = CNum(0, ((double)i) * baseBinFreq) /
         CNum(2 * M_PI * cutoff, ((double)i) * baseBinFreq);
 
-    /*
-    output[i] = CNum(0, RC * ((double)i - ((double)length) / 2) * baseBinFreq) /
-        CNum(1, RC * ((double)i - ((double)length) / 2) * baseBinFreq);
-    */
-
-    /*
-    if (std::abs(((double)i - ((double)length) / 2) * baseBinFreq) >
-        2 * M_PI * cutoff) {
-      output[i] = CNum(1, 0);
-    } else {
-      output[i] = CNum(0, 0);
-    }
-    */
   }
 
   return output;
