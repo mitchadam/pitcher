@@ -69,4 +69,5 @@ int pitcher(int argc, char *argv[]) {
     // Close reader and writer when finished
     reader.close();
     writer.close();
+    return 0;
 }
